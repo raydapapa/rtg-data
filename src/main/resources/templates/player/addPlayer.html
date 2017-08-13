@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8" />
-    <title th:text="${title}"></title>
-</head>
-<body>
+<head th:replace="fragments :: head"></head>
+<body class="container">
 <h1 th:text="${title}"></h1>
 
-<form method="post">
-    <input type="text" name="playerName" placeholder="请输入球员姓名" />
+<nav th:replace="fragments :: navigation"></nav>
+
+<form method="post" style="max-width: 60%;">
+    <div class="form-group">
+        <label for="playerName-field">姓名</label>
+        <input class="form-control" id="playerName-field" type="text" name="playerName" placeholder="请输入球员姓名" />
+    </div>
+    <div class="form-group">
+        <label for="kitNumber-field">球衣号码</label>
+        <input class="form-control" id="kitNumber-field" type="text" name="kitNumber" placeholder="请输入球衣号码" />
+    </div>
     <input type="submit" value="新增球员" />
 </form>
 

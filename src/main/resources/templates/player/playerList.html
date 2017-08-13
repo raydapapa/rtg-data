@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8" />
-    <title th:text="${title}"></title>
-</head>
-<body>
-    <h1 th:text="${title}"></h1>
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<h1 th:text="${title}"></h1>
 
-    <p th:unless="${playerNames} and ${playerNames.size()}">没有球员数据！</p>
+<nav th:replace="fragments :: navigation"></nav>
 
-    <ul>
-        <li th:each="playerName : ${playerNames}" th:text="${playerName}"></li>
-    </ul>
+<p th:unless="${playerNames} and ${playerNames.size()}">没有球员数据！</p>
+
+<table class="table">
+
+    <tr>
+        <th>姓名</th>
+        <th>球衣号码</th>
+    </tr>
+
+    <tr th:each="playerName : ${playerNames}">
+        <td th:text="${playerName}"></td>
+        <td th:text="8"></td>
+    </tr>
+
+</table>
+
 </body>
 </html>

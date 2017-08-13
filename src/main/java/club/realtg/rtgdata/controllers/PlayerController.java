@@ -17,12 +17,12 @@ import java.util.ArrayList;
  * Created on 2017-08-13
  */
 @Controller
-@RequestMapping("player")
+//@RequestMapping("player")
 public class PlayerController {
 
     static ArrayList<String> listPlayerNames = new ArrayList<>();
 
-    @RequestMapping(value = "")
+    @RequestMapping(value = "list")
     public String gotoPlayerList(Model model) {
         String title = "球员列表";
 
@@ -53,7 +53,7 @@ public class PlayerController {
     public String processAddPlayerForm(@RequestParam String playerName) {
         listPlayerNames.add(playerName);
         // Redirect to /player
-        return "redirect:";
+        return "redirect:/list";
     }
 
 }
