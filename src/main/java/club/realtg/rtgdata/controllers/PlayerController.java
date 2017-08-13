@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created on 2017-08-13
  */
 @Controller
-public class HelloController {
+public class PlayerController {
 
     @RequestMapping(value = "")
     @ResponseBody

@@ -24,6 +24,6 @@ nbdist/
 .nb-gradle/
 
 ### Maven ###
-mvnw
-mvnw.cmd
-.mvn
+-mvnw
+-mvnw.cmd
+-.mvn
