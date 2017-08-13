@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${title}"></title>
+</head>
+<body>
+<h1 th:text="${title}"></h1>
+
+<form method="post">
+    <input type="text" name="playerName" placeholder="请输入球员姓名" />
+    <input type="submit" value="新增球员" />
+</form>
+
+</body>
+</html>

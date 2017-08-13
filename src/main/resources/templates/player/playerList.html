@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <h1 th:text="${title}"></h1>
+
+    <p th:unless="${playerNames} and ${playerNames.size()}">没有球员数据！</p>
+
+    <ul>
+        <li th:each="playerName : ${playerNames}" th:text="${playerName}"></li>
+    </ul>
+</body>
+</html>
