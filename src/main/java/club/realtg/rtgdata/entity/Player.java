@@ -65,6 +65,22 @@ public class Player {
     /** 简介 */
     private String desc;
 
+    public Player(String realName, String nickName, String idCardNo, int kitNumber, Date birthDate, int height, int weight, int preferredFoot, String position, String phoneNo, String qqNo, String wechatNo, String desc) {
+        this.realName = realName;
+        this.nickName = nickName;
+        this.idCardNo = idCardNo;
+        this.kitNumber = kitNumber;
+        this.birthDate = birthDate;
+        this.height = height;
+        this.weight = weight;
+        this.preferredFoot = preferredFoot;
+        this.position = position;
+        this.phoneNo = phoneNo;
+        this.qqNo = qqNo;
+        this.wechatNo = wechatNo;
+        this.desc = desc;
+    }
+
     public int getId() {
         return id;
     }

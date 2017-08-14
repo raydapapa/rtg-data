@@ -20,6 +20,7 @@ import javax.validation.Valid;
  * Created on 2017-08-13
  */
 @Controller
+@RequestMapping("player")
 public class PlayerController {
 
     @Autowired
@@ -50,6 +51,7 @@ public class PlayerController {
         return "redirect:/list";
     }
 
+    /*
     @RequestMapping(value = "remove", method = RequestMethod.GET)
     public String displayRemovePlayerForm(Model model) {
         String title = "删除球员";
@@ -65,4 +67,5 @@ public class PlayerController {
         }
         return "redirect:/list";
     }
+    */
 }
