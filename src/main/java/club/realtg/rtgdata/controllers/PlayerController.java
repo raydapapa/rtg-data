@@ -1,59 +1,68 @@
 package club.realtg.rtgdata.controllers;
 
+import club.realtg.rtgdata.dao.PlayerDao;
+import club.realtg.rtgdata.entity.Player;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import javax.validation.Valid;
 
 /**
- * Desc
+ * Controller for Player
  *
  * @author Papa Ray
  * Created on 2017-08-13
  */
 @Controller
-//@RequestMapping("player")
 public class PlayerController {
 
-    static ArrayList<String> listPlayerNames = new ArrayList<>();
+    @Autowired
+    private PlayerDao playerDao;
 
     @RequestMapping(value = "list")
     public String gotoPlayerList(Model model) {
         String title = "球员列表";
-
-//        listPlayerNames.add("邵宇驰");
-//        listPlayerNames.add("李万郁");
-//        listPlayerNames.add("张超");
-//        listPlayerNames.add("秦笑");
-//        listPlayerNames.add("罗渝力");
-//        listPlayerNames.add("吴林青");
-//        listPlayerNames.add("曾理");
-//        listPlayerNames.add("向军");
-//        listPlayerNames.add("李双");
-//        listPlayerNames.add("刘浩");
-
         model.addAttribute("title",title);
-        model.addAttribute("playerNames",listPlayerNames);
+        model.addAttribute("players",playerDao.findAll());
         return "player/playerList";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
-    public String addNewPlayer(Model model) {
+    public String displayAddPlayerForm(Model model) {
         String title = "新增球员";
         model.addAttribute("title",title);
         return "player/addPlayer";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String processAddPlayerForm(@RequestParam String playerName) {
-        listPlayerNames.add(playerName);
-        // Redirect to /player
+    public String processAddPlayerForm(@ModelAttribute @Valid Player newPlayer, Errors errors, Model model) {
+        if(errors.hasErrors()) {
+            model.addAttribute("title", "新增球员");
+            return "player/addPlayer";
+        }
+        playerDao.save(newPlayer);
         return "redirect:/list";
     }
 
+    @RequestMapping(value = "remove", method = RequestMethod.GET)
+    public String displayRemovePlayerForm(Model model) {
+        String title = "删除球员";
+        model.addAttribute("title",title);
+        model.addAttribute("players",playerDao.findAll());
+        return "player/remove";
+    }
+
+    @RequestMapping(value = "remove", method = RequestMethod.POST)
+    public String processRemovePlayerForm(@RequestParam int[] playerIds) {
+        for (int playerId : playerIds) {
+            playerDao.delete(playerId);
+        }
+        return "redirect:/list";
+    }
 }
