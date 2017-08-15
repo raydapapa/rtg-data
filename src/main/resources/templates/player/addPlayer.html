@@ -2,29 +2,64 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body class="container">
+
+<div class="wrapper">
+
 <h1 th:text="${title}"></h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
 <form method="post" style="max-width: 80%;">
     <div class="form-group">
-        <label for="playerName-field">姓名</label>
-        <input class="form-control" id="playerName-field" type="text" name="realName" placeholder="请输入球员姓名" />
+        <label for="playerName-field">姓名<span class="red">*</span></label>
+        <input class="form-control" id="playerName-field" name="realName" placeholder="请输入姓名" />
     </div>
     <div class="form-group">
-        <label for="nickName-field">绰号</label>
-        <input class="form-control" id="nickName-field" type="text" name="nickName" placeholder="请输入绰号" />
+        <label for="nickName-field">绰号<span class="red">*</span></label>
+        <input class="form-control" id="nickName-field" name="nickName" placeholder="请输入绰号" />
     </div>
     <div class="form-group">
-        <label for="idCardNo-field">身份证号</label>
-        <input class="form-control" id="idCardNo-field" type="text" name="idCardNo" placeholder="请输入身份证号" />
+        <label for="idCardNo-field">身份证号<span class="red">*</span></label>
+        <input class="form-control" id="idCardNo-field" name="idCardNo" placeholder="请输入身份证号" />
     </div>
     <div class="form-group">
-        <label for="kitNumber-field">球衣号码</label>
-        <input class="form-control" id="kitNumber-field" type="text" name="kitNumber" placeholder="请输入球衣号码" />
+        <label for="phoneNo-field">手机号<span class="red">*</span></label>
+        <input class="form-control" id="phoneNo-field" name="phoneNo" placeholder="请输入手机号" />
+    </div>
+    <div class="form-group">
+        <label for="position-field">场上位置<span class="red">*</span></label>
+        <input class="form-control" id="position-field" name="position" placeholder="请输入场上位置" />
+    </div>
+    <div class="form-group">
+        <label for="kitNumber-field">球衣号码<span class="red">*</span></label>
+        <input class="form-control" id="kitNumber-field" name="kitNumber" placeholder="请输入球衣号码" />
+    </div>
+    <div class="form-group">
+        <label for="height-field">身高</label>
+        <input class="form-control" id="height-field" name="height" placeholder="请输入身高" />cm
+    </div>
+    <div class="form-group">
+        <label for="weight-field">体重</label>
+        <input class="form-control" id="weight-field" name="weight" placeholder="请输入体重" />kg
+    </div>
+    <div class="form-group">
+        <label for="preferredFoot-field">擅长足</label>
+        <select class="form-control" id="preferredFoot-field" name="preferredFoot" style="width: 90px">
+            <option value="1" selected="selected">右脚</option>
+            <option value="2">左脚</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="qqNo-field">QQ号</label>
+        <input class="form-control" id="qqNo-field" name="qqNo" placeholder="请输入QQ号" />
+    </div>
+    <div class="form-group">
+        <label for="wechatNo-field">微信号</label>
+        <input class="form-control" id="wechatNo-field" name="wechatNo" placeholder="请输入微信号" />
     </div>
     <input type="submit" value="保存" />
 </form>
 
+</div>
 </body>
 </html>
