@@ -1,8 +1,6 @@
 package club.realtg.rtgdata.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -14,6 +12,7 @@ import java.util.Date;
  * Created on 2017-08-14
  */
 @Entity
+@Table(name = "t_player")
 public class Player {
     /** ID */
     @Id
@@ -22,6 +21,7 @@ public class Player {
 
     /** 身份证姓名 */
     @NotNull
+    @Column(name = "real_name")
     private String realName;
 
     /** 绰号 */
@@ -33,7 +33,6 @@ public class Player {
     private String idCardNo;
 
     /** 球衣号码 */
-    @Size(max=3)
     private int kitNumber;
 
     /** 出生日期 */
@@ -46,14 +45,14 @@ public class Player {
     private int weight;
 
     /** 擅长足 1:右脚 2:左脚 */
-    @Size(max=1)
+    @Column(name = "pref_foot")
     private int preferredFoot;
 
     /** 场上位置 */
     private String position;
 
     /** 手机号 */
-    @Size(min=11, max=11)
+    @Size(max=11)
     private String phoneNo;
 
     /** QQ号 */
@@ -63,7 +62,18 @@ public class Player {
     private String wechatNo;
 
     /** 简介 */
+    @Column(name = "description")
     private String desc;
+
+    public Player() {
+    }
+
+    public Player(String realName, String nickName, String idCardNo, int kitNumber) {
+        this.realName = realName;
+        this.nickName = nickName;
+        this.idCardNo = idCardNo;
+        this.kitNumber = kitNumber;
+    }
 
     public Player(String realName, String nickName, String idCardNo, int kitNumber, Date birthDate, int height, int weight, int preferredFoot, String position, String phoneNo, String qqNo, String wechatNo, String desc) {
         this.realName = realName;

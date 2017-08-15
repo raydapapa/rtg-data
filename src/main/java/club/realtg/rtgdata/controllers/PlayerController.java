@@ -20,28 +20,27 @@ import javax.validation.Valid;
  * Created on 2017-08-13
  */
 @Controller
-@RequestMapping("player")
 public class PlayerController {
 
     @Autowired
     private PlayerDao playerDao;
 
-    @RequestMapping(value = "list")
-    public String gotoPlayerList(Model model) {
+    @RequestMapping(value = "list", produces = "text/plain;charset=UTF-8")
+    public String gotoPlayerList(Model model ) {
         String title = "球员列表";
         model.addAttribute("title",title);
         model.addAttribute("players",playerDao.findAll());
         return "player/playerList";
     }
 
-    @RequestMapping(value = "add", method = RequestMethod.GET)
+    @RequestMapping(value = "add", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String displayAddPlayerForm(Model model) {
         String title = "新增球员";
         model.addAttribute("title",title);
         return "player/addPlayer";
     }
 
-    @RequestMapping(value = "add", method = RequestMethod.POST)
+    @RequestMapping(value = "add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String processAddPlayerForm(@ModelAttribute @Valid Player newPlayer, Errors errors, Model model) {
         if(errors.hasErrors()) {
             model.addAttribute("title", "新增球员");
