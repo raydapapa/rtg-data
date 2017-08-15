@@ -26,9 +26,9 @@ public class PlayerTest {
     @Test
     public void testEntity() {
         Player player = new Player();
-        player.setRealName("秦笑");
-        player.setNickName("笑哥");
-        player.setIdCardNo("500103198310257013");
+        player.setRealName("测试者");
+        player.setNickName("小测测");
+        player.setIdCardNo("500103200210257096");
         player.setKitNumber(10);
 
         player = playerDao.save(player);

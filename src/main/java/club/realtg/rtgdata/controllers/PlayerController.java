@@ -25,7 +25,7 @@ public class PlayerController {
     @Autowired
     private PlayerDao playerDao;
 
-    @RequestMapping(value = "list", produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "list")
     public String gotoPlayerList(Model model ) {
         String title = "球员列表";
         model.addAttribute("title",title);
@@ -33,14 +33,14 @@ public class PlayerController {
         return "player/playerList";
     }
 
-    @RequestMapping(value = "add", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddPlayerForm(Model model) {
         String title = "新增球员";
         model.addAttribute("title",title);
         return "player/addPlayer";
     }
 
-    @RequestMapping(value = "add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddPlayerForm(@ModelAttribute @Valid Player newPlayer, Errors errors, Model model) {
         if(errors.hasErrors()) {
             model.addAttribute("title", "新增球员");
