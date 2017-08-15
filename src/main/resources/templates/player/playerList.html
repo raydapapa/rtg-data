@@ -14,14 +14,27 @@
         <th>姓名</th>
         <th>绰号</th>
         <th>身份证号</th>
+        <th>手机号</th>
         <th>球衣号码</th>
+        <th>场上位置</th>
+        <th>擅长足</th>
+        <th>身高</th>
+        <th>体重</th>
     </tr>
 
     <tr th:each="player : ${players}">
         <td th:text="${player.realName}"></td>
         <td th:text="${player.nickName}"></td>
         <td th:text="${player.idCardNo}"></td>
+        <td th:text="${player.phoneNo}"></td>
         <td th:text="${player.kitNumber}"></td>
+        <td th:text="${player.position}"></td>
+        <td  th:switch="${player.preferredFoot}">
+            <span th:case="1">右脚</span>
+            <span th:case="2">左脚</span>
+        </td>
+        <td th:text="${player.height}"></td>
+        <td th:text="${player.weight}"></td>
     </tr>
 
 </table>

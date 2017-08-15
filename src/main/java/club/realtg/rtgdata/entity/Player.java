@@ -48,8 +48,8 @@ public class Player {
     @Column(name = "pref_foot")
     private int preferredFoot;
 
-    /** 场上位置 */
-    private String position;
+    /** 场上位置 0:守门员 1:中后卫 2:边后卫 3:后腰 4:前腰 5:边前卫 6:中锋 */
+    private int position;
 
     /** 手机号 */
     @Size(max=11)
@@ -75,7 +75,7 @@ public class Player {
         this.kitNumber = kitNumber;
     }
 
-    public Player(String realName, String nickName, String idCardNo, int kitNumber, Date birthDate, int height, int weight, int preferredFoot, String position, String phoneNo, String qqNo, String wechatNo, String desc) {
+    public Player(String realName, String nickName, String idCardNo, int kitNumber, Date birthDate, int height, int weight, int preferredFoot, int position, String phoneNo, String qqNo, String wechatNo, String desc) {
         this.realName = realName;
         this.nickName = nickName;
         this.idCardNo = idCardNo;
@@ -159,11 +159,11 @@ public class Player {
         this.preferredFoot = preferredFoot;
     }
 
-    public String getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(int position) {
         this.position = position;
     }
 
