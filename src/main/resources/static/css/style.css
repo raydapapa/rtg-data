@@ -1,0 +1,96 @@
+.loading-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    background: rgba(255,255,255,0.7);
+    border-radius: 3px;
+}
+.loading-overlay .glyphicon{
+    top: 50%;
+    left: 50%;
+    color: #000;
+    font-size: 24px;
+}
+.glyphicon-animation{
+    -webkit-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/* modal */
+/* validate */
+.must-label:after{
+    content:"*";
+    font-weight: bold;
+    color: red;
+    font-size: 18px;
+    padding-right:5px;
+}
+.error{
+    color: red;
+}
+/* 页面基本框架样式 */
+.header{
+    background-color: #fff;
+}
+.header h3{
+    display: inline-block;
+    margin: 0;
+    padding: 15px 0 10px 20px;
+}
+.header .tools{
+    margin: 0;
+    padding: 10px 50px 0 0;
+}
+#app .container-fluid{
+    margin: 15px;
+}
+.box-header .tool-a{
+    font-size: 17px;
+    padding: 5px;
+}
+.box-header .search{
+    margin-left: 5px;
+}
+.box.box-solid > .box-header .search:hover{
+    color: #ffffff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+body {
+    margin: 0;
+    background-color: rgba(242, 242, 242, 1);
+}
+
+.box-header input {
+    width: 180px;
+}
+
+.box.box-solid>.box-header .search:hover {
+    color: #ffffff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+input[type="checkbox"] {
+    margin: 4px;
+    cursor: pointer;
+}
+
+a {
+    cursor: pointer;
+}
+
+modalInnerTable {
+    width: 50%;
+}

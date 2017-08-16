@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html xmlns:th="http://www.thymeleaf.org/">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"/>
+
     <title th:text="${title}">标题</title>
 
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap-responsive.min.css}" />
-    <link rel="stylesheet" th:href="@{/css/AdminLTE/AdminLTE.min.css}" />
-    <!--<link rel="stylesheet" th:href="@{/css/styles.css}" />-->
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap-theme.min.css}" />
+    <link rel="stylesheet" th:href="@{/AdminLTE/css/AdminLTE.min.css}"/>
+    <link rel="stylesheet" th:href="@{/AdminLTE/css/skins/skin-green.min.css}"/>
+    <!--<link rel="stylesheet" th:href="@{/css/style.css}" />-->
 
     <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}" />
     <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}" />
-    <!--<script type="text/javascript" th:src="@{/js/script.js}" />-->
+    <script type="text/javascript" th:src="@{/AdminLTE/js/adminlte.js}" />
+    <script type="text/javascript" th:src="@{/js/script.js}" />
 </head>
 <body>
 
