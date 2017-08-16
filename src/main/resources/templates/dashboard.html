@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap-theme.min.css}"/>
+    <link rel="stylesheet" th:href="@{/AdminLTE/css/AdminLTE.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <h3>控制台</h3>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-box">
+			            <span class="info-box-icon bg-aqua">
+			            	<i class="glyphicon glyphicon-user"></i>
+			            </span>
+                    <div class="info-box-content">
+                        <div class="msg-block">
+                            <p class="info-box-number">${total}</p>
+                            <p class="info-box-text">用户总数</p>
+                        </div>
+                        <div class="msg-block pull-right">
+                            <p class="info-box-number">${riskTotal}</p>
+                            <p class="info-box-text">风险客户</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-box">
+			            <span class="info-box-icon bg-aqua">
+			            	<i class="glyphicon glyphicon-tag"></i>
+			            </span>
+                    <div class="info-box-content">
+                        <div class="msg-block">
+                            <p class="info-box-number">${iosTotal}</p>
+                            <p class="info-box-text">ios用户数</p>
+                        </div>
+                        <div class="msg-block pull-right">
+                            <p class="info-box-number">${androidTotal}</p>
+                            <p class="info-box-text">android用户数</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-solid">
+                    <div class="box-body no-padding">
+                        <p style="padding: 50px;text-align: center">趋势图</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

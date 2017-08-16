@@ -26,7 +26,7 @@ public class PlayerController {
     private PlayerDao playerDao;
 
     @RequestMapping(value = "list")
-    public String gotoPlayerList(Model model ) {
+    public String gotoPlayerList(Model model) {
         String title = "球员列表";
         model.addAttribute("title",title);
         model.addAttribute("players",playerDao.findAll());

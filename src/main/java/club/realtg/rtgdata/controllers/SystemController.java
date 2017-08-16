@@ -17,4 +17,9 @@ public class SystemController {
         return "index";
     }
 
+    @RequestMapping(value = "/dashboard")
+    public String toDashboard() {
+        return "dashboard";
+    }
+
 }

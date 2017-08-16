@@ -27,3 +27,6 @@ nbdist/
 -mvnw
 -mvnw.cmd
 -.mvn
+
+### Project ###
+application.properties
