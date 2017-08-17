@@ -1,4 +1,4 @@
-package club.realtg.rtgdata.controllers;
+package club.realtg.rtgdata.controller;
 
 import club.realtg.rtgdata.dao.PlayerDao;
 import club.realtg.rtgdata.entity.Player;
@@ -9,7 +9,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
