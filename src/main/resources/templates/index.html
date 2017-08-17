@@ -199,8 +199,8 @@
         $(".content-wrapper iframe").attr("src",url);
         $(".a-link.active").removeClass("active");
         $(".treeview.active").removeClass("active");
-        $(e.target).closest(".a-link").addClass("active");
-        $(e.target).closest(".treeview").addClass("active");
+        $($(this).target).closest(".a-link").addClass("active");
+        $($(this).target).closest(".treeview").addClass("active");
     });
 
 </script>
