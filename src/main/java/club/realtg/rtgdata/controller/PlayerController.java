@@ -2,6 +2,7 @@ package club.realtg.rtgdata.controller;
 
 import club.realtg.rtgdata.entity.Player;
 import club.realtg.rtgdata.service.IPlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 @Controller
 public class PlayerController {
 
-    @Resource
+    @Autowired
     IPlayerService playerService;
 
     @RequestMapping(value = "list")

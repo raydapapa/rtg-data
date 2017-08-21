@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerServiceImpl implements IPlayerService{
 
-    @Autowired
     private PlayerDao playerDao;
+
+    @Autowired
+    public PlayerServiceImpl(PlayerDao playerDao) {
+        this.playerDao = playerDao;
+    }
 
     @Override
     public Iterable<Player> getPlayerList() {
