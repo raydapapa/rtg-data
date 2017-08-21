@@ -15,7 +15,7 @@
     <div class="box box-solid">
         <!-- 按钮图标 -->
         <div class="box-header">
-            <a href="javascript:void(0)" class="tool-a" ><i class="glyphicon glyphicon-plus"></i></a>
+            <a href="javascript:void(0)" class="tool-a" v-on:click="addPlayer"><i class="glyphicon glyphicon-plus"></i></a>
             <a href="javascript:void(0)" class="tool-a" ><i class="glyphicon glyphicon-minus"></i></a>
             <a href="javascript:void(0)" class="tool-a" ><i class="glyphicon glyphicon-refresh"></i></a>
             <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" >查询</a>
@@ -78,6 +78,17 @@
 </div>
 </div>
 
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        // 在 `methods` 对象中定义方法
+        methods: {
+            addPlayer: function() {
+                alert("新增球员");
+            }
+        }
+    })
+</script>
 
 
 </body>
