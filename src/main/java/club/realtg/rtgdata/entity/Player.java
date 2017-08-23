@@ -48,7 +48,7 @@ public class Player {
     @Column(name = "pref_foot")
     private int preferredFoot;
 
-    /** 场上位置 0:守门员 1:中后卫 2:边后卫 3:后腰 4:前腰 5:边前卫 6:中锋 */
+    /** 场上位置 0:守门员 1:中后卫 2:边后卫 3:后腰 4:前腰 5:边前卫/边锋 6:中锋 */
     private int position;
 
     /** 手机号 */

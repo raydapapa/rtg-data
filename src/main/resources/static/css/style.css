@@ -100,3 +100,7 @@ modalInnerTable {
     vertical-align: middle;
     margin-bottom: 0px;
 }
+
+#tblPlayerList {
+    margin-bottom: 0px;
+}

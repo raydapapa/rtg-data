@@ -19,7 +19,7 @@
             <a href="javascript:void(0)" class="tool-a" v-on:click="addPlayer"><i class="glyphicon glyphicon-plus"></i></a>
             <a href="javascript:void(0)" class="tool-a" ><i class="glyphicon glyphicon-minus"></i></a>
             <a href="javascript:void(0)" class="tool-a" ><i class="glyphicon glyphicon-refresh"></i></a>
-            <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" >查询</a>
+            <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" v-on:click="query">查询</a>
             <input class="form-control pull-right searchInput" v-model="keyword" placeholder="请输入关键字"/>
         </div>
 
@@ -41,36 +41,61 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="player : ${players}">
-                    <td><input type="checkbox" th:value="${player.id}"/></td>
-                    <td th:text="${player.realName}"></td>
-                    <td th:text="${player.nickName}"></td>
-                    <td th:text="${player.idCardNo}"></td>
-                    <td th:text="${player.phoneNo}"></td>
-                    <td th:text="${player.kitNumber}"></td>
-                    <td th:switch="${player.position}">
-                        <span th:case="1">中后卫</span>
-                        <span th:case="2">边后卫</span>
-                        <span th:case="3">后腰</span>
-                        <span th:case="4">前腰</span>
-                        <span th:case="5">边前卫</span>
-                        <span th:case="6">中锋</span>
-                        <span th:case="0">守门员</span>
+                <tr v-for="item in players">
+                    <td><input type="checkbox" v-bind:value="item.id"/></td>
+                    <td v-text="item.realName"></td>
+                    <td v-text="item.nickName"></td>
+                    <td v-text="item.idCardNo"></td>
+                    <td v-text="item.phoneNo"></td>
+                    <td v-text="item.kitNumber"></td>
+                    <td>
+                        <span v-if="item.position==0">守门员</span>
+                        <span v-if="item.position==1">中后卫</span>
+                        <span v-if="item.position==2">边后卫</span>
+                        <span v-if="item.position==3">后腰</span>
+                        <span v-if="item.position==4">前腰</span>
+                        <span v-if="item.position==5">边前卫/边锋</span>
+                        <span v-if="item.position==6">中锋</span>
                     </td>
-                    <td  th:switch="${player.preferredFoot}">
-                        <span th:case="1">右脚</span>
-                        <span th:case="2">左脚</span>
+                    <td>
+                        <span v-if="item.preferredFoot==1">右脚</span>
+                        <span v-if="item.preferredFoot==2">左脚</span>
                     </td>
-                    <td th:text="${player.height}"></td>
-                    <td th:text="${player.weight}"></td>
+                    <td v-text="item.height"></td>
+                    <td v-text="item.weight"></td>
                     <td>
                         <a class="btn btn-default btn-sm">查看</a>
-                        <button type="button" class="btn btn-primary btn-sm" >修改</button>
+                        <button type="button" class="btn btn-primary btn-sm">修改</button>
                     </td>
                 </tr>
             </tbody>
         </table>
 
+        <div class="pagebar">
+            <nav class="pull-left col-md-3" style="padding-left: 20px;" aria-label="Page navigation">
+                <span class="pagination">共{{ total }}条记录，每页最多显示
+                    <select v-model="pageSize" v-on:change="query">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>条
+                </span>
+            </nav>
+            <nav class="pull-right" style="padding-right: 40px;" aria-label="Page navigation" v-if="pages&gt;1">
+                <ul class="pagination">
+                    <li><a href="javascript:void(0)" v-on:click="previousPage" aria-label="Previous"><span>&laquo;</span></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo-3)" v-text="pageNo-3" v-if="pageNo-3&gt;=1"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo-2)" v-text="pageNo-2" v-if="pageNo-2&gt;=1"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo-1)" v-text="pageNo-1" v-if="pageNo-1&gt;=1"></a></li>
+                    <li class="active"><a href="javascript:void(0)" v-on:click="tpPage(pageNo)" v-text="pageNo"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo+1)" v-text="pageNo+1" v-if="pageNo+1&lt;=pages"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo+2)" v-text="pageNo+2" v-if="pageNo+2&lt;=pages"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo+3)" v-text="pageNo+3" v-if="pageNo+3&lt;=pages"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="nextPage" aria-label="Next"><span>&raquo;</span></a></li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 </div>
@@ -115,13 +140,13 @@
                 <div class="col-sm-6">
                     <select class="form-control" id="position-field" name="position" v-model="opPlayer.position" style="width: 120px">
                         <option value="">请选择</option>
+                        <option value="0">守门员</option>
                         <option value="1">中后卫</option>
                         <option value="2">边后卫</option>
                         <option value="3">后腰</option>
                         <option value="4">前腰</option>
-                        <option value="5">边前卫</option>
+                        <option value="5">边前卫/边锋</option>
                         <option value="6">中锋</option>
-                        <option value="0">守门员</option>
                     </select>
                 </div>
             </div>
@@ -181,6 +206,10 @@
     var vm = new Vue({
         el: '#app',
         data:{
+            pageNo: 1,
+            pageSize: 5,
+            pages: 0,
+            total: 0,
             keyword: "",
             operate: 'add',
             opPlayer: {},
@@ -188,7 +217,61 @@
         },
         // 在 `methods` 对象中定义方法
         methods: {
+            initPage: function(){
+                this.loadPlayers();
+            },
+            //关键字查询
+            query : function() {
+                this.pageNo = 1;
+                this.loadPlayers();
+            },
+            //加载球员列表
+            loadPlayers : function() {
+                var param = {
+                    keyword: this.keyword,
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize
+                };
 
+                CommonOperation.ajaxRequest("query.html",param,{
+                    func: function(result){
+                        var page = result.obj||{};
+                        vm.pages = page.totalPages;
+                        vm.total = page.totalElements;
+                        vm.players.splice(0,vm.players.length);
+                        var content = page.content;
+                        $.each(content, function() {
+                            vm.players.push(this);
+                        });
+                    },
+                    errorFunc: function(error){
+                        alert("加载球员列表出现错误！"+error.toString());
+                    },
+                    element: $("body")
+                });
+            },
+            //刷新列表
+            refresh: function(){
+                this.pageNo = 1;
+                this.keyword = "";
+                this.loadPlayers();
+                $("#tblPlayerList tbody").find("input[type='checkbox']").prop("checked",false);
+            },
+            //分页导航
+            tpPage: function(page){
+                this.pageNo = page;
+                this.loadPlayers();
+            },
+            previousPage: function(){
+                if(this.pageNo==1) return;
+                this.pageNo = this.pageNo-1;
+                this.loadPlayers();
+            },
+            nextPage: function(){
+                if(this.pageNo==this.pages) return;
+                this.pageNo = this.pageNo+1;
+                this.loadPlayers();
+            },
             //选中所有checkbox
             checkAll: function(){
                 var checked = $("#cbxCheckAll").prop("checked");
@@ -212,15 +295,33 @@
             playerModalConfirm: function(){
 
                 if("add"==this.operate){
-                    alert("确认保存！");
-//                    this.saveAddEmp();
+                    this.saveAddPlayer();
                 }else if("edit"==this.operate){
                     alert("确认修改！");
-//                    this.saveEditEmp();
+//                    this.saveEditPlayer();
                 }
+            },
+            //保存新增操作
+            saveAddPlayer: function(){
+//                if(!$("#formPlayer").valid()) return;
+                CommonOperation.ajaxRequest("saveAddPlayer.html",this.opPlayer,{
+                    func: function(result){
+                        if(result.success){
+                            $('#modPlayer').modal('hide');
+                        }else{
+                            alert("保存新增球员资料失败:"+result.msg);
+                        }
+                        vm.refresh();
+                    },
+                    errorFunc: function(error){
+                        alert("保存新增球员资料失败:"+error);
+                    },
+                    element: $("#formPlayer")
+                });
             }
         }
-    })
+    });
+    vm.initPage();
 </script>
 
 

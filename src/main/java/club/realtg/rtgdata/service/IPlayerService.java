@@ -1,6 +1,8 @@
 package club.realtg.rtgdata.service;
 
 import club.realtg.rtgdata.entity.Player;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * Desc
@@ -8,12 +10,6 @@ import club.realtg.rtgdata.entity.Player;
  * @author Papa Ray
  * Created on 2017-08-21
  */
-public interface IPlayerService {
+public interface IPlayerService extends JpaRepository<Player, Integer>, JpaSpecificationExecutor<Player> {
 
-    Iterable<Player> getPlayerList();
-
-    /**
-     * 保存成功返回1，失败返回0
-     */
-    int savePlayer(Player player);
 }
