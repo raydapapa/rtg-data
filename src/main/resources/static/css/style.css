@@ -33,7 +33,7 @@
     font-weight: bold;
     color: red;
     font-size: 18px;
-    padding-right:5px;
+    /*padding-right:5px;*/
 }
 .error{
     color: red;
@@ -93,4 +93,10 @@ a {
 
 modalInnerTable {
     width: 50%;
+}
+
+#formPlayer label {
+    text-align: right;
+    vertical-align: middle;
+    margin-bottom: 0px;
 }

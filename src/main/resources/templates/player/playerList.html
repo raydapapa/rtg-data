@@ -9,6 +9,7 @@
     <h3 th:text="${title}"></h3>
 </div>
 
+<!-- 主界面 -->
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-12">
@@ -26,7 +27,7 @@
         <table class="table table-hover" id="tblPlayerList">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="cbxCheckAll" /></th>
+                    <th><input type="checkbox" id="cbxCheckAll" v-on:click="checkAll" /></th>
                     <th>姓名</th>
                     <th>绰号</th>
                     <th>身份证号</th>
@@ -41,7 +42,7 @@
             </thead>
             <tbody>
                 <tr th:each="player : ${players}">
-                    <td><input type="checkbox" /></td>
+                    <td><input type="checkbox" th:value="${player.id}"/></td>
                     <td th:text="${player.realName}"></td>
                     <td th:text="${player.nickName}"></td>
                     <td th:text="${player.idCardNo}"></td>
@@ -70,21 +71,153 @@
             </tbody>
         </table>
 
-
-
     </div>
 </div>
 </div>
 </div>
+
+<!-- 新增球员窗口 -->
+<div class="modal fade bs-example-modal-sm" id="modPlayer" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h2 class="modal-title" id="headerModPlayer">球员信息</h2>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="formPlayer">
+            <div class="form-group">
+                <label for="playerName-field" class="col-sm-3 must-label">姓名</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="playerName-field" name="realName" v-model="opPlayer.realName" placeholder="请输入姓名" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nickName-field" class="col-sm-3">绰号</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="nickName-field" name="nickName" v-model="opPlayer.nickName" placeholder="请输入绰号" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="idCardNo-field" class="col-sm-3">身份证号</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="idCardNo-field" name="idCardNo" v-model="opPlayer.idCardNo" placeholder="请输入身份证号" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phoneNo-field" class="col-sm-3">手机号</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="phoneNo-field" name="phoneNo" v-model="opPlayer.phoneNo" placeholder="请输入手机号" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="position-field" class="col-sm-3">场上位置</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="position-field" name="position" v-model="opPlayer.position" style="width: 120px">
+                        <option value="">请选择</option>
+                        <option value="1">中后卫</option>
+                        <option value="2">边后卫</option>
+                        <option value="3">后腰</option>
+                        <option value="4">前腰</option>
+                        <option value="5">边前卫</option>
+                        <option value="6">中锋</option>
+                        <option value="0">守门员</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="kitNumber-field" class="col-sm-3">球衣号码</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="kitNumber-field" name="kitNumber" v-model="opPlayer.kitNumber" placeholder="请输入球衣号码" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="height-field" class="col-sm-3">身高(cm)</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="height-field" name="height" v-model="opPlayer.height" placeholder="请输入身高" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="weight-field" class="col-sm-3">体重(kg)</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="weight-field" name="weight" v-model="opPlayer.weight" placeholder="请输入体重" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="preferredFoot-field" class="col-sm-3">擅长足</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="preferredFoot-field" name="preferredFoot" v-model="opPlayer.preferredFoot" style="width: 90px">
+                        <option value="1">右脚</option>
+                        <option value="2">左脚</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="qqNo-field" class="col-sm-3">QQ号</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="qqNo-field" name="qqNo" v-model="opPlayer.qqNo" placeholder="请输入QQ号" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="wechatNo-field" class="col-sm-3">微信号</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="wechatNo-field" name="wechatNo" v-model="opPlayer.wechatNo" placeholder="请输入微信号" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" v-on:click="playerModalConfirm">保存</button>
+        <button type="reset" class="btn btn-default" v-on:click="resetPlayerForm">重置</button>
+    </div>
+</div>
+</div>
+</div>
+
 </div>
 
 <script type="text/javascript">
     var vm = new Vue({
         el: '#app',
+        data:{
+            keyword: "",
+            operate: 'add',
+            opPlayer: {},
+            players : []
+        },
         // 在 `methods` 对象中定义方法
         methods: {
+
+            //选中所有checkbox
+            checkAll: function(){
+                var checked = $("#cbxCheckAll").prop("checked");
+                $("#tblPlayerList tbody").find("input[type='checkbox']").prop("checked",checked);
+            },
+            //重置球员表单
+            resetPlayerForm: function(){
+                document.getElementById("formPlayer").reset();//每次打开窗口时清空上次录入的信息
+            },
+            //弹出新增球员录入窗口
             addPlayer: function() {
-                alert("新增球员");
+                this.opPlayer = {};
+                this.operate = "add";
+                this.opPlayer.position = "";//场上位置默认"请选择"
+                this.opPlayer.preferredFoot = 1;//默认右脚
+                $('#headerModPlayer').html("新增球员资料");
+                $('#modPlayer').modal('show');
+                this.resetPlayerForm();
+            },
+            //确认新增、修改操作
+            playerModalConfirm: function(){
+
+                if("add"==this.operate){
+                    alert("确认保存！");
+//                    this.saveAddEmp();
+                }else if("edit"==this.operate){
+                    alert("确认修改！");
+//                    this.saveEditEmp();
+                }
             }
         }
     })
