@@ -1,9 +1,13 @@
 package club.realtg.rtgdata.common.util;
 
+import org.springframework.data.domain.Sort;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2016/10/21 11:41.
  */
 public class SortDto {
+    public static final String ASC = Sort.Direction.ASC.toString();
+    public static final String DESC = Sort.Direction.DESC.toString();
 
     //排序方式
     private String orderType;

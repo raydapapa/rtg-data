@@ -3,7 +3,6 @@ package club.realtg.rtgdata.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * 球员实体类
@@ -35,8 +34,8 @@ public class Player {
     /** 球衣号码 */
     private int kitNumber;
 
-    /** 出生日期 */
-    private Date birthDate;
+    /** 出生日期 YY-MM-DD */
+    private String birthDate;
 
     /** 身高(cm) */
     private int height;
@@ -75,7 +74,7 @@ public class Player {
         this.kitNumber = kitNumber;
     }
 
-    public Player(String realName, String nickName, String idCardNo, int kitNumber, Date birthDate, int height, int weight, int preferredFoot, int position, String phoneNo, String qqNo, String wechatNo, String desc) {
+    public Player(String realName, String nickName, String idCardNo, int kitNumber, String birthDate, int height, int weight, int preferredFoot, int position, String phoneNo, String qqNo, String wechatNo, String desc) {
         this.realName = realName;
         this.nickName = nickName;
         this.idCardNo = idCardNo;
@@ -93,6 +92,10 @@ public class Player {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRealName() {
@@ -127,11 +130,11 @@ public class Player {
         this.kitNumber = kitNumber;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
