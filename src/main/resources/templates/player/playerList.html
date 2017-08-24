@@ -30,11 +30,11 @@
                     <th><input type="checkbox" id="cbxCheckAll" v-on:click="checkAll" /></th>
                     <th>姓名</th>
                     <th>绰号</th>
-                    <th>身份证号</th>
-                    <th>手机号</th>
                     <th>球衣号码</th>
                     <th>场上位置</th>
                     <th>擅长足</th>
+                    <th>年龄</th>
+                    <th>手机号</th>
                     <th>身高(cm)</th>
                     <th>体重(kg)</th>
                     <th>操作</th>
@@ -45,8 +45,6 @@
                     <td><input type="checkbox" v-bind:value="item.id"/></td>
                     <td v-text="item.realName"></td>
                     <td v-text="item.nickName"></td>
-                    <td v-text="item.idCardNo"></td>
-                    <td v-text="item.phoneNo"></td>
                     <td v-text="item.kitNumber"></td>
                     <td>
                         <span v-if="item.position==0">守门员</span>
@@ -61,6 +59,8 @@
                         <span v-if="item.preferredFoot==1">右脚</span>
                         <span v-if="item.preferredFoot==2">左脚</span>
                     </td>
+                    <td v-text="item.age"></td>
+                    <td v-text="item.phoneNo"></td>
                     <td v-text="item.height"></td>
                     <td v-text="item.weight"></td>
                     <td>
@@ -239,7 +239,7 @@
             pages: 0,
             total: 0,
             keyword: "",
-            operate: 'add',
+            operate: 'view',
             opPlayer: {},
             players : []
         },
@@ -265,6 +265,7 @@
                         vm.players.splice(0,vm.players.length);
                         var content = page.content;
                         $.each(content, function() {
+                            this.age = vm.computeAge(this.birthDate);
                             vm.players.push(this);
                         });
                     },
@@ -400,6 +401,20 @@
                         element: $("#tblPlayerList")
                     });
                 });
+            },
+            //通过生日计算年龄
+            computeAge: function(birthDate){
+                if(!birthDate) return;
+                var year = birthDate.substr(0,4);
+                var month = birthDate.substr(5,2);
+                var date = new Date();
+                var year1 = date.getFullYear();
+                var month1 = date.getMonth()+1;
+                if(month1>Number(month)){
+                    return year1-Number(year);
+                }
+                var age = year1-Number(year)-1;
+                return age>0?age:0;
             },
             //页面初始化
             initPage: function(){
