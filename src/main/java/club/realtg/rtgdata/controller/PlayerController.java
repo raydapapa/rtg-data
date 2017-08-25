@@ -43,9 +43,17 @@ public class PlayerController extends BaseController {
     }
 
     @RequestMapping(value = "query")
-    public void query(HttpServletResponse response, int pageNo, int pageSize, String keyword) {
-        Specifications newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", "like", keyword)));
-        Page<Player> players = playerService.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(SortDto.ASC, "kitNumber")));
+    public void query(HttpServletResponse response, int pageNo, int pageSize, String keyword, String sortKey, String direction) {
+        if("birthDate".equals(sortKey)){
+            if(SortDto.ASC.equals(direction)){
+                direction = SortDto.DESC;
+            } else {
+                direction = SortDto.ASC;
+            }
+        }
+        Specifications newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", "like", keyword)))
+                .or(new BaseSearch<Player>(new SearchDto("nickName", "like", keyword)));
+        Page<Player> players = playerService.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(direction, sortKey)));
         writeSuccess(response, players);
     }
 

@@ -16,11 +16,32 @@
     <div class="box box-solid">
         <!-- 按钮图标 -->
         <div class="box-header">
-            <a href="javascript:void(0)" class="tool-a" v-on:click="addPlayer"><i class="glyphicon glyphicon-plus"></i></a>
-            <a href="javascript:void(0)" class="tool-a" v-on:click="delPlayer"><i class="glyphicon glyphicon-minus"></i></a>
-            <a href="javascript:void(0)" class="tool-a" v-on:click="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
-            <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" v-on:click="query">查询</a>
-            <input class="form-control pull-right searchInput" v-model="keyword" placeholder="请输入关键字"/>
+            <div class="col-md-4">
+                <a href="javascript:void(0)" class="tool-a" v-on:click="addPlayer"><i class="glyphicon glyphicon-plus"></i></a>
+                <a href="javascript:void(0)" class="tool-a" v-on:click="delPlayer"><i class="glyphicon glyphicon-minus"></i></a>
+                <a href="javascript:void(0)" class="tool-a" v-on:click="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-6">
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" v-on:click="query">查询</a>
+                <input class="form-control pull-right searchInput" v-model="keyword" placeholder="请输入查询关键字"/>
+                <div class="btn-group pull-right" style="padding-right: 10px">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnSort" v-on:click="toggleDirection()">排序↑</button>
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)" v-on:click="sort('position')">位置</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('kitNumber')">球衣号码</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('birthDate')">年龄</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('height')">身高</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('weight')">体重</a></li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
         <!-- 表格 -->
         <table class="table table-hover table-striped" id="tblPlayerList">
@@ -33,8 +54,8 @@
                     <th>场上位置</th>
                     <th>年龄</th>
                     <th>顺足</th>
-                    <!--<th>身高(cm)</th>
-                    <th>体重(kg)</th>-->
+                    <th>身高(cm)</th>
+                    <th>体重(kg)</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -58,8 +79,8 @@
                         <span v-if="item.preferredFoot==1">右脚</span>
                         <span v-if="item.preferredFoot==2">左脚</span>
                     </td>
-                    <!--<td v-text="item.height"></td>
-                    <td v-text="item.weight"></td>-->
+                    <td v-text="item.height"></td>
+                    <td v-text="item.weight"></td>
                     <td>
                         <a class="btn btn-default btn-sm" v-on:click="viewPlayer(item)">查看</a>
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="editPlayer(item)">修改</button>
@@ -241,6 +262,8 @@
             pages: 0,
             total: 0,
             keyword: "",
+            sortKey: "position",
+            direction: "ASC",
             operate: 'view',
             opPlayer: {},
             players : []
@@ -252,9 +275,27 @@
                 this.pageNo = 1;
                 this.loadPlayers();
             },
+            //排序
+            sort : function(sortKey) {
+                this.sortKey = sortKey;
+                this.query();
+            },
+            //排序方向
+            toggleDirection : function() {
+                if(this.direction == "ASC") {
+                    this.direction = "DESC";
+                    $("#btnSort").html("排序↓");
+                }
+                else{
+                    this.direction = "ASC";
+                    $("#btnSort").html("排序↑");
+                }
+            },
             //加载球员列表
             loadPlayers : function() {
                 var param = {
+                    sortKey: this.sortKey,
+                    direction: this.direction,
                     keyword: this.keyword,
                     pageNo: this.pageNo-1,//页面的pageNo以1为起始，后端是以0为起始
                     pageSize: this.pageSize
