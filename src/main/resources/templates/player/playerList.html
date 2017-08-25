@@ -22,9 +22,8 @@
             <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" v-on:click="query">查询</a>
             <input class="form-control pull-right searchInput" v-model="keyword" placeholder="请输入关键字"/>
         </div>
-
         <!-- 表格 -->
-        <table class="table table-hover" id="tblPlayerList">
+        <table class="table table-hover table-striped" id="tblPlayerList">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="cbxCheckAll" v-on:click="checkAll" /></th>
@@ -34,8 +33,8 @@
                     <th>场上位置</th>
                     <th>年龄</th>
                     <th>顺足</th>
-                    <th>身高(cm)</th>
-                    <th>体重(kg)</th>
+                    <!--<th>身高(cm)</th>
+                    <th>体重(kg)</th>-->
                     <th>操作</th>
                 </tr>
             </thead>
@@ -59,8 +58,8 @@
                         <span v-if="item.preferredFoot==1">右脚</span>
                         <span v-if="item.preferredFoot==2">左脚</span>
                     </td>
-                    <td v-text="item.height"></td>
-                    <td v-text="item.weight"></td>
+                    <!--<td v-text="item.height"></td>
+                    <td v-text="item.weight"></td>-->
                     <td>
                         <a class="btn btn-default btn-sm" v-on:click="viewPlayer(item)">查看</a>
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="editPlayer(item)">修改</button>
@@ -68,7 +67,7 @@
                 </tr>
             </tbody>
         </table>
-
+        <!-- 分页区域 -->
         <div class="pagebar">
             <nav class="pull-left col-md-3" style="padding-left: 20px;" aria-label="Page navigation">
                 <span class="pagination">共{{ total }}条记录，每页最多显示
@@ -109,7 +108,6 @@
     </div>
     <div class="modal-body">
         <form class="form-horizontal" id="formPlayer">
-            <!--<input type="hidden" id="playerId-field" name="id" v-model="opPlayer.id" />-->
             <div class="form-group">
                 <label for="playerName-field" class="col-sm-3 control-label">姓名</label>
                 <div class="col-sm-6">
@@ -118,8 +116,13 @@
             </div>
             <div class="form-group">
                 <label for="nickName-field" class="col-sm-3 control-label">绰号</label>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <input class="form-control" id="nickName-field" name="nickName" v-model="opPlayer.nickName" placeholder="请输入绰号" />
+                </div>
+
+                <label for="kitNumber-field" class="col-sm-2 control-label">球衣号码</label>
+                <div class="col-sm-2">
+                    <input class="form-control" id="kitNumber-field" name="kitNumber" v-model="opPlayer.kitNumber" />
                 </div>
             </div>
             <div class="form-group">
@@ -129,7 +132,7 @@
                 </div>
                 <label for="age-field" class="col-sm-2 control-label">年龄</label>
                 <div class="col-sm-2">
-                    <span class="form-control" id="age-field" name="age"></span>
+                    <input class="form-control" id="age-field" name="age" readonly="readonly"/>
                 </div>
             </div>
             <div class="form-group">
@@ -152,12 +155,6 @@
                         <option value="1">右脚</option>
                         <option value="2">左脚</option>
                     </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="kitNumber-field" class="col-sm-3 control-label">球衣号码</label>
-                <div class="col-sm-6">
-                    <input class="form-control" id="kitNumber-field" name="kitNumber" v-model="opPlayer.kitNumber" placeholder="请输入球衣号码" />
                 </div>
             </div>
             <div class="form-group">
@@ -240,7 +237,7 @@
         el: '#app',
         data:{
             pageNo: 1,
-            pageSize: 5,
+            pageSize: 10,
             pages: 0,
             total: 0,
             keyword: "",
@@ -328,7 +325,7 @@
             editPlayer: function(player){
                 this.opPlayer = player;
                 this.operate = "edit";
-                $("#age-field").html(vm.computeAge(vm.opPlayer.birthDate));
+                $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
                 $('#headerModPlayer').html("修改球员资料");
                 $('#modPlayer').modal('show');
                 $('#modPlayer').find('input').removeAttr("disabled");
@@ -337,7 +334,6 @@
             },
             //确认新增、修改操作
             playerModalConfirm: function(){
-
                 if("add"==this.operate){
                     this.saveAddPlayer();
                 }else if("edit"==this.operate){
@@ -386,7 +382,7 @@
             viewPlayer: function(player){
                 this.opPlayer = player;
                 this.operate = "view";
-                $("#age-field").html(vm.computeAge(vm.opPlayer.birthDate));
+                $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
                 $('#headerModPlayer').html("查看球员资料");
                 $('#modPlayer').modal('show');
                 $('#modPlayer').find('input').attr("disabled","disabled");
@@ -459,7 +455,7 @@
                     todayBtn: true//显示今日按钮
                 }).on('changeDate', function(ev){
                     vm.opPlayer.birthDate = $(ev.target).val();
-                    $("#age-field").html(vm.computeAge(vm.opPlayer.birthDate));
+                    $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
                 });
                 this.loadPlayers();
             }
