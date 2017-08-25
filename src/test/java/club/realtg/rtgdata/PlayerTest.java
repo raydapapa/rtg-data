@@ -1,7 +1,7 @@
 package club.realtg.rtgdata;
 
-import club.realtg.rtgdata.dao.PlayerDao;
 import club.realtg.rtgdata.entity.Player;
+import club.realtg.rtgdata.service.IPlayerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class PlayerTest {
 
     @Autowired
-    private PlayerDao playerDao;
+    IPlayerService playerService;
 
     @Test
     public void testEntity() {
@@ -31,15 +31,15 @@ public class PlayerTest {
         player.setIdCardNo("500103200210257096");
         player.setKitNumber(10);
 
-        player = playerDao.save(player);
+        player = playerService.save(player);
 
-        player = playerDao.findOne(player.getId());
+        player = playerService.findOne(player.getId());
         System.out.println("player info:" + player);
         System.out.println(player.getRealName());
         System.out.println(player.getNickName());
         System.out.println(player.getIdCardNo());
         System.out.println(player.getKitNumber());
 
-        playerDao.delete(player.getId());
+        playerService.delete(player.getId());
     }
 }

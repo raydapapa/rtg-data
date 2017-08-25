@@ -3,6 +3,7 @@ package club.realtg.rtgdata.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * 球员实体类
@@ -13,10 +14,28 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "t_player")
 public class Player {
-    /** ID */
+
+    /**
+     * ID
+     */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    /**
+     * 记录创建时间
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
+    @org.hibernate.annotations.CreationTimestamp
+    private Date ctime;
+
+    /**
+     * 记录更新时间
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @org.hibernate.annotations.UpdateTimestamp
+    private Date mtime;
 
     /** 身份证姓名 */
     @NotNull
@@ -96,6 +115,22 @@ public class Player {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Date getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
+    }
+
+    public Date getMtime() {
+        return mtime;
+    }
+
+    public void setMtime(Date mtime) {
+        this.mtime = mtime;
     }
 
     public String getRealName() {

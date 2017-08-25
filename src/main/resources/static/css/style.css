@@ -104,3 +104,7 @@ modalInnerTable {
 #tblPlayerList {
     margin-bottom: 0px;
 }
+
+#age-field {
+    border: 1px;
+}
