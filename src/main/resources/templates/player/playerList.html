@@ -280,7 +280,7 @@
                 this.sortKey = sortKey;
                 this.query();
             },
-            //排序方向
+            //排序方向切换
             toggleDirection : function() {
                 if(this.direction == "ASC") {
                     this.direction = "DESC";
@@ -349,6 +349,18 @@
             resetPlayerForm: function(){
                 document.getElementById("formPlayer").reset();//每次打开窗口时清空上次录入的信息
             },
+            //弹出"查看球员资料"窗口
+            viewPlayer: function(player){
+                this.opPlayer = player;
+                this.operate = "view";
+                $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
+                $('#headerModPlayer').html("查看球员资料");
+                $('#modPlayer').modal('show');
+                $('#modPlayer').find('input').attr("disabled","disabled");
+                $('#modPlayer').find('select').attr("disabled","disabled");
+                $('#modPlayer').find('textarea').attr("disabled","disabled");
+                $('#modPlayer').find('.modal-footer').hide();
+            },
             //弹出“新增球员资料”窗口
             addPlayer: function() {
                 this.opPlayer = {};
@@ -360,6 +372,7 @@
                 $('#modPlayer').find('input').removeAttr("disabled");
                 $('#modPlayer').find('select').removeAttr("disabled");
                 $('#modPlayer').find('textarea').removeAttr("disabled");
+                $('#modPlayer').find('.modal-footer').show();
                 this.resetPlayerForm();
             },
             //弹出"修改球员资料"窗口
@@ -372,6 +385,7 @@
                 $('#modPlayer').find('input').removeAttr("disabled");
                 $('#modPlayer').find('select').removeAttr("disabled");
                 $('#modPlayer').find('textarea').removeAttr("disabled");
+                $('#modPlayer').find('.modal-footer').show();0
             },
             //确认新增、修改操作
             playerModalConfirm: function(){
@@ -404,7 +418,7 @@
 //                if(!$("#formAddEmployee").valid()) return;
                 delete this.opPlayer.ctime;
                 delete this.opPlayer.mtime;
-                CommonOperation.ajaxRequest("savePlayer.html",this.opPlayer,{
+                CommonOperation.ajaxRequest("updatePlayer.html",this.opPlayer,{
                     func: function(result){
                         if(result.success){
                             $('#modPlayer').modal('hide');
@@ -418,17 +432,6 @@
                     },
                     element: $("#formPlayer")
                 });
-            },
-            //弹出"查看球员资料"窗口
-            viewPlayer: function(player){
-                this.opPlayer = player;
-                this.operate = "view";
-                $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
-                $('#headerModPlayer').html("查看球员资料");
-                $('#modPlayer').modal('show');
-                $('#modPlayer').find('input').attr("disabled","disabled");
-                $('#modPlayer').find('select').attr("disabled","disabled");
-                $('#modPlayer').find('textarea').attr("disabled","disabled");
             },
             //删除
             delPlayer: function(){

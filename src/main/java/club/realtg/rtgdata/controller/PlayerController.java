@@ -1,20 +1,15 @@
 package club.realtg.rtgdata.controller;
 
-import club.realtg.rtgdata.common.util.BaseSearch;
-import club.realtg.rtgdata.common.util.PageableUtil;
-import club.realtg.rtgdata.common.util.SearchDto;
-import club.realtg.rtgdata.common.util.SortDto;
 import club.realtg.rtgdata.entity.Player;
-import club.realtg.rtgdata.service.IPlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import club.realtg.rtgdata.service.PlayerService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -27,13 +22,8 @@ import javax.validation.Valid;
 @Controller
 public class PlayerController extends BaseController {
 
-    private final
-    IPlayerService playerService;
-
-    @Autowired
-    public PlayerController(IPlayerService playerService) {
-        this.playerService = playerService;
-    }
+    @Resource
+    PlayerService playerService;
 
     @RequestMapping(value = "list")
     public String gotoPlayerList(Model model) {
@@ -44,28 +34,39 @@ public class PlayerController extends BaseController {
 
     @RequestMapping(value = "query")
     public void query(HttpServletResponse response, int pageNo, int pageSize, String keyword, String sortKey, String direction) {
-        if("birthDate".equals(sortKey)){
-            if(SortDto.ASC.equals(direction)){
-                direction = SortDto.DESC;
-            } else {
-                direction = SortDto.ASC;
-            }
+        try {
+            Page<Player> players = playerService.getPlayersPage(pageNo, pageSize, keyword, sortKey, direction);
+            writeSuccess(response, players);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeError(response, e.getMessage());
         }
-        Specifications newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", "like", keyword)))
-                .or(new BaseSearch<Player>(new SearchDto("nickName", "like", keyword)));
-        Page<Player> players = playerService.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(direction, sortKey)));
-        writeSuccess(response, players);
     }
 
     @RequestMapping(value = "savePlayer")
-    public void savePlayer(@ModelAttribute @Valid Player newPlayer, Errors errors, HttpServletResponse response, Model model) {
+    public void saveAddPlayer(@ModelAttribute @Valid Player player, Errors errors, HttpServletResponse response, Model model) {
         if(errors.hasErrors()) {
             model.addAttribute("errors", errors.getAllErrors());
             return;
         }
         try {
-            playerService.save(newPlayer);
-            writeSuccess(response, newPlayer);
+            playerService.savePlayer(player);
+            writeSuccess(response, player);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeError(response, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "updatePlayer")
+    public void saveUpdatePlayer(@ModelAttribute @Valid Player player, Errors errors, HttpServletResponse response, Model model) {
+        if(errors.hasErrors()) {
+            model.addAttribute("errors", errors.getAllErrors());
+            return;
+        }
+        try {
+            playerService.updatePlayer(player);
+            writeSuccess(response, player);
         } catch (Exception e) {
             e.printStackTrace();
             writeError(response, e.getMessage());
@@ -74,12 +75,8 @@ public class PlayerController extends BaseController {
 
     @RequestMapping(value = "removePlayers")
     public void removePlayers(HttpServletResponse response, String ids){
-        if(ids==null) return;
-        String[] idArry = ids.split(",");
         try {
-            for(String strId : idArry) {
-                playerService.delete(Integer.valueOf(strId.trim()));
-            }
+            playerService.removePlayers(ids);
             writeSuccess(response);
         } catch (Exception e) {
             e.printStackTrace();

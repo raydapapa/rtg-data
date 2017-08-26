@@ -1,13 +1,14 @@
 package club.realtg.rtgdata;
 
 import club.realtg.rtgdata.entity.Player;
-import club.realtg.rtgdata.service.IPlayerService;
+import club.realtg.rtgdata.service.PlayerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.annotation.Resource;
 
 /**
  * Desc
@@ -20,8 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles("dev")
 public class PlayerTest {
 
-    @Autowired
-    IPlayerService playerService;
+    @Resource
+    PlayerService playerService;
 
     @Test
     public void testEntity() {
@@ -31,15 +32,18 @@ public class PlayerTest {
         player.setIdCardNo("500103200210257096");
         player.setKitNumber(10);
 
-        player = playerService.save(player);
+        playerService.savePlayer(player);
 
-        player = playerService.findOne(player.getId());
+        player = playerService.getPlayerById(player.getId());
         System.out.println("player info:" + player);
         System.out.println(player.getRealName());
         System.out.println(player.getNickName());
         System.out.println(player.getIdCardNo());
         System.out.println(player.getKitNumber());
 
-        playerService.delete(player.getId());
+        player.setDesc("测试简介内容");
+        playerService.updatePlayer(player);
+
+        playerService.removePlayers(""+player.getId());
     }
 }
