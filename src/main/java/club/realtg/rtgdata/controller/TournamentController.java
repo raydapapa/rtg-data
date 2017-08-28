@@ -1,7 +1,7 @@
 package club.realtg.rtgdata.controller;
 
-import club.realtg.rtgdata.entity.Player;
-import club.realtg.rtgdata.service.PlayerService;
+import club.realtg.rtgdata.entity.Tournament;
+import club.realtg.rtgdata.service.TournamentService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,69 +14,69 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
- * Controller for Player
+ * Controller for Tournament
  *
  * @author Papa Ray
- * Created on 2017-08-13
+ * Created on 2017-08-28
  */
 @Controller
-public class PlayerController extends BaseController {
+public class TournamentController extends BaseController {
 
     @Resource
-    private PlayerService playerService;
+    private TournamentService tournamentService;
 
-    @RequestMapping(value = "playerList")
-    public String gotoPlayerList(Model model) {
-        String title = "球员列表";
+    @RequestMapping(value = "tournamentList")
+    public String gotoTournamentList(Model model) {
+        String title = "赛事列表";
         model.addAttribute("title",title);
-        return "biz/playerList";
+        return "biz/tournamentList";
     }
 
-    @RequestMapping(value = "queryPlayer")
+    @RequestMapping(value = "queryTournament")
     public void query(HttpServletResponse response, int pageNo, int pageSize, String keyword, String sortKey, String direction) {
         try {
-            Page<Player> players = playerService.getPlayersPage(pageNo, pageSize, keyword, sortKey, direction);
-            writeSuccess(response, players);
+            Page<Tournament> tournaments = tournamentService.getTournamentsPage(pageNo, pageSize, keyword, sortKey, direction);
+            writeSuccess(response, tournaments);
         } catch (Exception e) {
             e.printStackTrace();
             writeError(response, e.getMessage());
         }
     }
 
-    @RequestMapping(value = "savePlayer")
-    public void saveAddPlayer(@ModelAttribute @Valid Player player, Errors errors, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "saveTournament")
+    public void saveAddTournament(@ModelAttribute @Valid Tournament tournament, Errors errors, HttpServletResponse response, Model model) {
         if(errors.hasErrors()) {
             model.addAttribute("errors", errors.getAllErrors());
             return;
         }
         try {
-            playerService.savePlayer(player);
-            writeSuccess(response, player);
+            tournamentService.saveTournament(tournament);
+            writeSuccess(response, tournament);
         } catch (Exception e) {
             e.printStackTrace();
             writeError(response, e.getMessage());
         }
     }
 
-    @RequestMapping(value = "updatePlayer")
-    public void saveUpdatePlayer(@ModelAttribute @Valid Player player, Errors errors, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "updateTournament")
+    public void saveUpdateTournament(@ModelAttribute @Valid Tournament tournament, Errors errors, HttpServletResponse response, Model model) {
         if(errors.hasErrors()) {
             model.addAttribute("errors", errors.getAllErrors());
             return;
         }
         try {
-            playerService.updatePlayer(player);
-            writeSuccess(response, player);
+            tournamentService.updateTournament(tournament);
+            writeSuccess(response, tournament);
         } catch (Exception e) {
             e.printStackTrace();
             writeError(response, e.getMessage());
         }
     }
 
-    @RequestMapping(value = "removePlayers")
-    public void removePlayers(HttpServletResponse response, String ids){
+    @RequestMapping(value = "removeTournaments")
+    public void removeTournaments(HttpServletResponse response, String ids){
         try {
-            playerService.removePlayers(ids);
+            tournamentService.removeTournaments(ids);
             writeSuccess(response);
         } catch (Exception e) {
             e.printStackTrace();

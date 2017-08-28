@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+
+<div id="app">
+
+<div class="header">
+    <h3 th:text="${title}"></h3>
+</div>
+
+<!-- 主界面 -->
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+    <div class="box box-solid">
+        <!-- 按钮图标 -->
+        <div class="box-header">
+            <div class="col-md-4">
+                <a href="javascript:void(0)" class="tool-a" v-on:click="addTournament"><i class="glyphicon glyphicon-plus"></i></a>
+                <a href="javascript:void(0)" class="tool-a" v-on:click="delTournament"><i class="glyphicon glyphicon-minus"></i></a>
+                <a href="javascript:void(0)" class="tool-a" v-on:click="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-6">
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm pull-right search" v-on:click="query">查询</a>
+                <input class="form-control pull-right searchInput" v-model="keyword" placeholder="请输入查询关键字"/>
+                <div class="btn-group pull-right" style="padding-right: 10px">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnSort" v-on:click="toggleDirection()">排序↑</button>
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)" v-on:click="sort('seasonStartDate')">开始日期</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('tournamentType')">赛事类型</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('ourRank')">我队名次</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- 表格 -->
+        <table class="table table-hover table-striped" id="tblTournamentList">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="cbxCheckAll" v-on:click="checkAll" /></th>
+                    <th>赛事名</th>
+                    <th>球场位置</th>
+                    <th>赛事类型</th>
+                    <th>参赛球队数</th>
+                    <th>开始日期</th>
+                    <th>结束日期</th>
+                    <th>本队名次</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in tournaments">
+                    <td><input type="checkbox" v-bind:value="item.id"/></td>
+                    <td v-text="item.name"></td>
+                    <td v-text="item.location"></td>
+                    <td>
+                        <span v-if="item.tournamentType==1">联赛</span>
+                        <span v-if="item.tournamentType==2">杯赛</span>
+                    </td>
+                    <td v-text="item.teamCnt"></td>
+                    <td v-text="item.seasonStartDate"></td>
+                    <td v-text="item.seasonEndDate"></td>
+                    <td v-text="item.ourRank"></td>
+                    <td>
+                        <a class="btn btn-default btn-sm" v-on:click="viewTournament(item)">查看</a>
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="editTournament(item)">修改</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- 分页区域 -->
+        <div class="pagebar">
+            <nav class="pull-left col-md-3" style="padding-left: 20px;" aria-label="Page navigation">
+                <span class="pagination">共{{ total }}条记录，每页最多显示
+                    <select v-model="pageSize" v-on:change="query">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>条
+                </span>
+            </nav>
+            <nav class="pull-right" style="padding-right: 40px;" aria-label="Page navigation" v-if="pages&gt;1">
+                <ul class="pagination">
+                    <li><a href="javascript:void(0)" v-on:click="previousPage" aria-label="Previous"><span>&laquo;</span></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo-3)" v-text="pageNo-3" v-if="pageNo-3&gt;=1"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo-2)" v-text="pageNo-2" v-if="pageNo-2&gt;=1"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo-1)" v-text="pageNo-1" v-if="pageNo-1&gt;=1"></a></li>
+                    <li class="active"><a href="javascript:void(0)" v-on:click="tpPage(pageNo)" v-text="pageNo"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo+1)" v-text="pageNo+1" v-if="pageNo+1&lt;=pages"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo+2)" v-text="pageNo+2" v-if="pageNo+2&lt;=pages"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="tpPage(pageNo+3)" v-text="pageNo+3" v-if="pageNo+3&lt;=pages"></a></li>
+                    <li><a href="javascript:void(0)" v-on:click="nextPage" aria-label="Next"><span>&raquo;</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- 新增赛事窗口 -->
+<div class="modal fade bs-example-modal-sm" id="modTournament" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h2 class="modal-title" id="headerModTournament">赛事信息</h2>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="formTournament">
+            <div class="form-group">
+                <label for="tournamentName-field" class="col-sm-3 control-label">赛事名</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="tournamentName-field" name="name" v-model="opTournament.name" placeholder="请输入赛事名" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="location-field" class="col-sm-3 control-label">球场位置</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="location-field" name="location" v-model="opTournament.location" placeholder="请输入球场位置" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tournamentType-field" class="col-sm-3 control-label">赛事类型</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="tournamentType-field" name="tournamentType" v-model="opTournament.tournamentType" style="width: 90px">
+                        <option value="1">联赛</option>
+                        <option value="2">杯赛</option>
+                    </select>
+                </div>
+                <label for="teamCnt-field" class="col-sm-3 control-label">参赛球队数</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="teamCnt-field" name="teamCnt" v-model="opTournament.teamCnt" placeholder="球队数量" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="seasonStartDate-field" class="col-sm-3 control-label">开赛日期</label>
+                <div class="col-sm-3">
+                    <input class="form-control selectDate" id="seasonStartDate-field" name="seasonStartDate" v-model="opTournament.seasonStartDate" placeholder="开赛日期" readonly="readonly" />
+                </div>
+                <label for="seasonEndDate-field" class="col-sm-3 control-label">结束日期</label>
+                <div class="col-sm-3">
+                    <input class="form-control selectDate" id="seasonEndDate-field" name="seasonEndDate" v-model="opTournament.seasonEndDate" placeholder="结束日期" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="officialUrl-field" class="col-sm-3 control-label">官网地址</label>
+                <div class="col-sm-6">
+                    <input class="form-control" id="officialUrl-field" name="officialUrl" v-model="opTournament.officialUrl" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ourRank-field" class="col-sm-3 control-label">我队名次</label>
+                <div class="col-sm-2">
+                    <input class="form-control" id="ourRank-field" name="ourRank" v-model="opTournament.ourRank" />
+                </div>
+                <label for="championId-field" class="col-sm-2 control-label">夺冠球队</label>
+                <div class="col-sm-2">
+                    <input class="form-control" id="championId-field" name="championId" v-model="opTournament.championId" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="desc-field" class="col-sm-3 control-label">简介</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" id="desc-field" name="desc" v-model="opTournament.desc" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" v-on:click="tournamentModalConfirm">保存</button>
+        <button type="reset" class="btn btn-default" v-on:click="resetTournamentForm">重置</button>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- 确认提示窗口 -->
+<div class="modal fade" id="confirmModal" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>×</span>
+                </button>
+                <h4 class="modal-title">确认提示框</h4>
+            </div>
+            <div class="modal-body">
+                <p>确认删除选择的赛事?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        data:{
+            pageNo: 1,
+            pageSize: 10,
+            pages: 0,
+            total: 0,
+            keyword: "",
+            sortKey: "seasonStartDate",
+            direction: "ASC",
+            operate: 'view',
+            opTournament: {},
+            tournaments : []
+        },
+        // 在 `methods` 对象中定义方法
+        methods: {
+            //关键字查询
+            query : function() {
+                this.pageNo = 1;
+                this.loadTournaments();
+            },
+            //排序
+            sort : function(sortKey) {
+                this.sortKey = sortKey;
+                this.query();
+            },
+            //排序方向切换
+            toggleDirection : function() {
+                if(this.direction == "ASC") {
+                    this.direction = "DESC";
+                    $("#btnSort").html("排序↓");
+                }
+                else{
+                    this.direction = "ASC";
+                    $("#btnSort").html("排序↑");
+                }
+            },
+            //加载赛事列表
+            loadTournaments : function() {
+                var param = {
+                    sortKey: this.sortKey,
+                    direction: this.direction,
+                    keyword: this.keyword,
+                    pageNo: this.pageNo-1,//页面的pageNo以1为起始，后端是以0为起始
+                    pageSize: this.pageSize
+                };
+                CommonOperation.ajaxRequest("queryTournament.html",param,{
+                    func: function(result){
+                        var page = result.obj||{};
+                        vm.pages = page.totalPages;
+                        vm.total = page.totalElements;
+                        vm.tournaments.splice(0,vm.tournaments.length);
+                        var content = page.content;
+                        $.each(content, function() {
+                            vm.tournaments.push(this);
+                        });
+                    },
+                    errorFunc: function(error){
+                        alert("加载赛事列表出现错误！"+error.toString());
+                    },
+                    element: $("body")
+                });
+            },
+            //刷新列表
+            refresh: function(){
+                this.pageNo = 1;
+                this.keyword = "";
+                this.loadTournaments();
+                $("#tblTournamentList tbody").find("input[type='checkbox']").prop("checked",false);
+            },
+            //分页导航
+            tpPage: function(page){
+                this.pageNo = page;
+                this.loadTournaments();
+            },
+            previousPage: function(){
+                if(this.pageNo==1) return;
+                this.pageNo = this.pageNo-1;
+                this.loadTournaments();
+            },
+            nextPage: function(){
+                if(this.pageNo==this.pages) return;
+                this.pageNo = this.pageNo+1;
+                this.loadTournaments();
+            },
+            //选中所有checkbox
+            checkAll: function(){
+                var checked = $("#cbxCheckAll").prop("checked");
+                $("#tblTournamentList tbody").find("input[type='checkbox']").prop("checked",checked);
+            },
+            //重置赛事表单
+            resetTournamentForm: function(){
+                document.getElementById("formTournament").reset();//每次打开窗口时清空上次录入的信息
+            },
+            //弹出"查看赛事资料"窗口
+            viewTournament: function(tournament){
+                this.opTournament = tournament;
+                this.operate = "view";
+                $('#headerModTournament').html("查看赛事资料");
+                $('#modTournament').modal('show');
+                $('#modTournament').find('input').attr("disabled","disabled");
+                $('#modTournament').find('select').attr("disabled","disabled");
+                $('#modTournament').find('textarea').attr("disabled","disabled");
+                $('#modTournament').find('.modal-footer').hide();
+            },
+            //弹出“新增赛事资料”窗口
+            addTournament: function() {
+                this.opTournament = {};
+                this.operate = "add";
+                this.opTournament.tournamentType = "1";//默认为"联赛"
+                $('#headerModTournament').html("新增赛事资料");
+                $('#modTournament').modal('show');
+                $('#modTournament').find('input').removeAttr("disabled");
+                $('#modTournament').find('select').removeAttr("disabled");
+                $('#modTournament').find('textarea').removeAttr("disabled");
+                $('#modTournament').find('.modal-footer').show();
+                this.resetTournamentForm();
+            },
+            //弹出"修改赛事资料"窗口
+            editTournament: function(tournament){
+                this.opTournament = tournament;
+                this.operate = "edit";
+                $('#headerModTournament').html("修改赛事资料");
+                $('#modTournament').modal('show');
+                $('#modTournament').find('input').removeAttr("disabled");
+                $('#modTournament').find('select').removeAttr("disabled");
+                $('#modTournament').find('textarea').removeAttr("disabled");
+                $('#modTournament').find('.modal-footer').show();0
+            },
+            //确认新增、修改操作
+            tournamentModalConfirm: function(){
+                if("add"==this.operate){
+                    this.saveAddTournament();
+                }else if("edit"==this.operate){
+                    this.saveEditTournament();
+                }
+            },
+            //保存新增操作
+            saveAddTournament: function(){
+//                if(!$("#formTournament").valid()) return;
+                CommonOperation.ajaxRequest("saveTournament.html",this.opTournament,{
+                    func: function(result){
+                        if(result.success){
+                            $('#modTournament').modal('hide');
+                        }else{
+                            alert("保存新增赛事资料失败:"+result.msg);
+                        }
+                        vm.refresh();
+                    },
+                    errorFunc: function(error){
+                        alert("保存新增赛事资料失败:"+error);
+                    },
+                    element: $("#formTournament")
+                });
+            },
+            //保存修改操作
+            saveEditTournament: function(){
+//                if(!$("#formAddEmployee").valid()) return;
+                delete this.opTournament.ctime;
+                delete this.opTournament.mtime;
+                CommonOperation.ajaxRequest("updateTournament.html",this.opTournament,{
+                    func: function(result){
+                        if(result.success){
+                            $('#modTournament').modal('hide');
+                        }else{
+                            alert("修改赛事资料失败:"+result.msg);
+                        }
+                        vm.refresh();
+                    },
+                    errorFunc: function(error){
+                        alert("修改赛事资料失败:"+error);
+                    },
+                    element: $("#formTournament")
+                });
+            },
+            //删除
+            delTournament: function(){
+                var ids = "" , idObject = {};
+                $('#tblTournamentList tbody input:checkbox:checked').each(function(){
+                    var id = $(this).val();
+                    ids += id+",";
+                    idObject[id] = true;
+                });
+                if(""==ids) return;
+                ids = ids.substr(0,ids.length-1);
+                $("#confirmModal").modal('show')
+                $("#confirmButton").unbind("click");
+                $("#confirmButton").bind("click",function(){
+                    $("#confirmModal").modal('hide')
+                    var param = {ids: ids};
+                    CommonOperation.ajaxRequest("removeTournaments.html",param,{
+                        func: function(result){
+                            if(result.success){
+                                $("#tblTournamentList tbody").find("input[type='checkbox']").prop("checked",false);
+                            }else{
+                                alert("赛事删除失败:"+result.msg);
+                            }
+                            vm.refresh();
+                        },
+                        errorFunc: function(error){
+                            alert("赛事删除出现异常:"+error);
+                        },
+                        element: $("#tblTournamentList")
+                    });
+                });
+            },
+            //页面初始化
+            initPage: function(){
+                $.fn.datetimepicker.dates['zh-CN'] = {
+                    days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+                    daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+                    daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+                    months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                    monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                    today: "今天",
+                    suffix: [],
+                    meridiem: ["上午", "下午"]
+                };
+                $(".selectDate").datetimepicker({
+                    format: "yyyy-mm-dd",
+                    language: "zh-CN",
+                    minView: "month",
+                    //initialDate: new Date(),//初始化当前日期
+                    autoclose: true,//选中自动关闭
+                    todayBtn: true//显示今日按钮
+                });
+                this.loadTournaments();
+            }
+        }
+    });
+    vm.initPage();
+</script>
+
+
+</body>
+</html>

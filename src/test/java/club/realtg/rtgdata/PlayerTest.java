@@ -35,7 +35,7 @@ public class PlayerTest {
         playerService.savePlayer(player);
 
         player = playerService.getPlayerById(player.getId());
-        System.out.println("player info:" + player);
+        System.out.println("biz info:" + player);
         System.out.println(player.getRealName());
         System.out.println(player.getNickName());
         System.out.println(player.getIdCardNo());

@@ -36,8 +36,9 @@ public class PlayerService {
                 direction = SortDto.ASC;
             }
         }
-        Specifications newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", "like", keyword)))
-                .or(new BaseSearch<Player>(new SearchDto("nickName", "like", keyword)));
+        Specifications newSpes;
+        newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", "like", keyword)))
+                .or(new BaseSearch<>(new SearchDto("nickName", "like", keyword)));
         return playerRepository.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(direction, sortKey)));
     }
 
@@ -52,7 +53,6 @@ public class PlayerService {
     public void updatePlayer(Player player) {
         playerRepository.save(player);
     }
-
 
     public void removePlayers(String ids) {
         if (StringUtils.isEmpty(ids)) return;

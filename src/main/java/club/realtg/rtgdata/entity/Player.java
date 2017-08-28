@@ -53,7 +53,8 @@ public class Player {
     /** 球衣号码 */
     private int kitNumber;
 
-    /** 出生日期 YY-MM-DD */
+    /** 出生日期 yyyy-MM-dd */
+    @Size(max=10)
     private String birthDate;
 
     /** 身高(cm) */

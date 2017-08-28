@@ -149,7 +149,7 @@
             <div class="form-group">
                 <label for="birthDate-field" class="col-sm-3 control-label">出生日期</label>
                 <div class="col-sm-3">
-                    <input class="form-control birthDate" id="birthDate-field" name="birthDate" v-model="opPlayer.birthDate" placeholder="出生日期" readonly="readonly" />
+                    <input class="form-control selectDate" id="birthDate-field" name="birthDate" v-model="opPlayer.birthDate" placeholder="出生日期" readonly="readonly" />
                 </div>
                 <label for="age-field" class="col-sm-2 control-label">年龄</label>
                 <div class="col-sm-2">
@@ -300,7 +300,7 @@
                     pageNo: this.pageNo-1,//页面的pageNo以1为起始，后端是以0为起始
                     pageSize: this.pageSize
                 };
-                CommonOperation.ajaxRequest("query.html",param,{
+                CommonOperation.ajaxRequest("queryPlayer.html",param,{
                     func: function(result){
                         var page = result.obj||{};
                         vm.pages = page.totalPages;
@@ -490,7 +490,7 @@
                     suffix: [],
                     meridiem: ["上午", "下午"]
                 };
-                $(".birthDate").datetimepicker({
+                $(".selectDate").datetimepicker({
                     format: "yyyy-mm-dd",
                     language: "zh-CN",
                     minView: "month",
