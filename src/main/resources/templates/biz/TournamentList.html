@@ -48,10 +48,10 @@
                     <th>赛事名</th>
                     <th>球场位置</th>
                     <th>赛事类型</th>
-                    <th>参赛球队数</th>
                     <th>开赛日期</th>
                     <th>结束日期</th>
                     <th>取得名次</th>
+                    <th>参赛球队数</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -64,10 +64,10 @@
                         <span v-if="item.tournamentType==1">联赛</span>
                         <span v-if="item.tournamentType==2">杯赛</span>
                     </td>
-                    <td v-text="item.teamCnt"></td>
                     <td v-text="item.seasonStartDate"></td>
                     <td v-text="item.seasonEndDate"></td>
                     <td v-text="item.ourRank"></td>
+                    <td v-text="item.teamCnt"></td>
                     <td>
                         <a class="btn btn-default btn-sm" v-on:click="viewTournament(item)">查看</a>
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="editTournament(item)">修改</button>
