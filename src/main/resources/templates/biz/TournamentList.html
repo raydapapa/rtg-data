@@ -145,11 +145,11 @@
             <div class="form-group">
                 <label for="seasonStartDate-field" class="col-sm-3 control-label">开赛日期</label>
                 <div class="col-sm-3">
-                    <input class="form-control selectDate" id="seasonStartDate-field" name="seasonStartDate" v-model="opTournament.seasonStartDate" placeholder="开赛日期" readonly="readonly" />
+                    <input class="form-control" id="seasonStartDate-field" name="seasonStartDate" v-model="opTournament.seasonStartDate" placeholder="开赛日期" readonly="readonly" />
                 </div>
                 <label for="seasonEndDate-field" class="col-sm-3 control-label">结束日期</label>
                 <div class="col-sm-3">
-                    <input class="form-control selectDate" id="seasonEndDate-field" name="seasonEndDate" v-model="opTournament.seasonEndDate" placeholder="结束日期" readonly="readonly" />
+                    <input class="form-control" id="seasonEndDate-field" name="seasonEndDate" v-model="opTournament.seasonEndDate" placeholder="结束日期" readonly="readonly" />
                 </div>
             </div>
             <div class="form-group">
@@ -225,6 +225,12 @@
         },
         // 在 `methods` 对象中定义方法
         methods: {
+            //日期格式处理
+            dateFmt: function (dateString) {
+                if (!dateString) return ''
+                dateString = dateString.toString()
+                return dateString.substr(0,10);
+            },
             //关键字查询
             query : function() {
                 this.pageNo = 1;
@@ -263,6 +269,8 @@
                         vm.tournaments.splice(0,vm.tournaments.length);
                         var content = page.content;
                         $.each(content, function() {
+                            this.seasonStartDate = vm.dateFmt(this.seasonStartDate);
+                            this.seasonEndDate = vm.dateFmt(this.seasonEndDate);
                             vm.tournaments.push(this);
                         });
                     },
@@ -336,7 +344,7 @@
                 $('#modTournament').find('input').removeAttr("disabled");
                 $('#modTournament').find('select').removeAttr("disabled");
                 $('#modTournament').find('textarea').removeAttr("disabled");
-                $('#modTournament').find('.modal-footer').show();0
+                $('#modTournament').find('.modal-footer').show();
             },
             //确认新增、修改操作
             tournamentModalConfirm: function(){
@@ -348,7 +356,6 @@
             },
             //保存新增操作
             saveAddTournament: function(){
-//                if(!$("#formTournament").valid()) return;
                 CommonOperation.ajaxRequest("saveTournament.html",this.opTournament,{
                     func: function(result){
                         if(result.success){
@@ -366,7 +373,6 @@
             },
             //保存修改操作
             saveEditTournament: function(){
-//                if(!$("#formAddEmployee").valid()) return;
                 delete this.opTournament.ctime;
                 delete this.opTournament.mtime;
                 CommonOperation.ajaxRequest("updateTournament.html",this.opTournament,{
@@ -427,13 +433,25 @@
                     suffix: [],
                     meridiem: ["上午", "下午"]
                 };
-                $(".selectDate").datetimepicker({
+                $("#seasonStartDate-field").datetimepicker({
                     format: "yyyy-mm-dd",
                     language: "zh-CN",
                     minView: "month",
                     //initialDate: new Date(),//初始化当前日期
                     autoclose: true,//选中自动关闭
                     todayBtn: true//显示今日按钮
+                }).on('changeDate', function(ev){
+                    vm.opTournament.seasonStartDate = $(ev.target).val();
+                });
+                $("#seasonEndDate-field").datetimepicker({
+                    format: "yyyy-mm-dd",
+                    language: "zh-CN",
+                    minView: "month",
+                    //initialDate: new Date(),//初始化当前日期
+                    autoclose: true,//选中自动关闭
+                    todayBtn: true//显示今日按钮
+                }).on('changeDate', function(ev){
+                    vm.opTournament.seasonEndDate = $(ev.target).val();
                 });
                 this.loadTournaments();
             }

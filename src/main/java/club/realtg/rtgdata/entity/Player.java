@@ -2,6 +2,7 @@ package club.realtg.rtgdata.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -47,7 +48,7 @@ public class Player {
 
     /** 身份证号 */
     @NotNull
-    @Size(min=15, max=18)
+    @Pattern(regexp="^(\\d{18,18}|\\d{15,15}|(\\d{17,17}[x|X]))$", message="身份证格式错误")
     private String idCardNo;
 
     /** 球衣号码 */

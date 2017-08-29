@@ -1,5 +1,7 @@
 package club.realtg.rtgdata.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -53,9 +55,11 @@ public class Tournament {
     private int teamCnt;
 
     /** 赛季开始日期 yyyy-MM-dd */
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date seasonStartDate;
 
     /** 赛季结束日期 yyyy-MM-dd */
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date seasonEndDate;
 
     /** 夺冠球队ID */
