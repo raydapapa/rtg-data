@@ -37,8 +37,8 @@ public class PlayerService {
             }
         }
         Specifications newSpes;
-        newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", "like", keyword)))
-                .or(new BaseSearch<>(new SearchDto("nickName", "like", keyword)));
+        newSpes = Specifications.where(new BaseSearch<Player>(new SearchDto("realName", SearchDto.LIKE, keyword)))
+                .or(new BaseSearch<>(new SearchDto("nickName", SearchDto.LIKE, keyword)));
         return playerRepository.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(direction, sortKey)));
     }
 
@@ -46,12 +46,18 @@ public class PlayerService {
         return playerRepository.findOne(id);
     }
 
-    public void savePlayer(Player player) {
-        playerRepository.save(player);
+    public void savePlayer(Player player) throws Exception {
+        //验证身份证是否重复
+        Player duplicatePlayer = playerRepository.findByIdCardNo(player.getIdCardNo());
+        if(duplicatePlayer == null) {
+            playerRepository.save(player);
+        } else {
+            throw new Exception("已经存在身份证号为'"+player.getIdCardNo()+"'的球员！");
+        }
     }
 
-    public void updatePlayer(Player player) {
-        playerRepository.save(player);
+    public void updatePlayer(Player player) throws Exception {
+        savePlayer(player);
     }
 
     public void removePlayers(String ids) {

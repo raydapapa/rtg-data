@@ -41,7 +41,7 @@ public class Team {
     @NotNull
     private String name;
 
-    /** 简介 */
+    /** 备注 */
     @Column(name = "description")
     private String desc;
 

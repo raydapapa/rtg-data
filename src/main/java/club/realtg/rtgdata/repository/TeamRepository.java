@@ -12,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface TeamRepository extends JpaRepository<Team, Integer>, JpaSpecificationExecutor<Team> {
 
+    Team findByName(String name);
 }

@@ -12,6 +12,8 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
  * Desc
  *
@@ -30,7 +32,7 @@ public class TournamentService {
 
     public Page<Tournament> getTournamentsPage(int pageNo, int pageSize, String keyword, String sortKey, String direction) {
         Specifications newSpes;
-        newSpes = Specifications.where(new BaseSearch<Tournament>(new SearchDto("name", "like", keyword)))
+        newSpes = Specifications.where(new BaseSearch<Tournament>(new SearchDto("name", SearchDto.LIKE, keyword)))
                 .or(new BaseSearch<>(new SearchDto("location", "like", keyword)));
         return tournamentRepository.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(direction, sortKey)));
     }
@@ -39,12 +41,19 @@ public class TournamentService {
         return tournamentRepository.findOne(id);
     }
 
-    public void saveTournament(Tournament tournament) {
+    public void saveTournament(Tournament tournament) throws Exception {
+        //校验赛事名是否重复
+        Tournament duplicateTournament = tournamentRepository.findByName(tournament.getName());
+        if(duplicateTournament == null) {
+            tournamentRepository.save(tournament);
+        } else {
+            throw new Exception("已经存在名为'"+tournament.getName()+"'的赛事！");
+        }
         tournamentRepository.save(tournament);
     }
 
-    public void updateTournament(Tournament tournament) {
-        tournamentRepository.save(tournament);
+    public void updateTournament(Tournament tournament) throws Exception {
+        saveTournament(tournament);
     }
 
     public void removeTournaments(String ids) {

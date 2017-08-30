@@ -22,17 +22,21 @@ import javax.annotation.Resource;
 public class PlayerTest {
 
     @Resource
-    PlayerService playerService;
+    private PlayerService playerService;
 
     @Test
-    public void testEntity() {
+    public void testEntity() throws Exception {
         Player player = new Player();
         player.setRealName("测试者");
         player.setNickName("小测测");
         player.setIdCardNo("500103200210257096");
         player.setKitNumber(10);
 
-        playerService.savePlayer(player);
+        try {
+            playerService.savePlayer(player);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         player = playerService.getPlayerById(player.getId());
         System.out.println("biz info:" + player);
@@ -42,7 +46,11 @@ public class PlayerTest {
         System.out.println(player.getKitNumber());
 
         player.setDesc("测试简介内容");
-        playerService.updatePlayer(player);
+        try {
+            playerService.updatePlayer(player);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         playerService.removePlayers(""+player.getId());
     }
