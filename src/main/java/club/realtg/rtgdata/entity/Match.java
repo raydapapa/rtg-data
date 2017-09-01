@@ -36,7 +36,9 @@ public class Match {
     private Date mtime;
 
     /** 所属联赛ID */
-    private int tournamentId;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="tournament_Id")
+    private Tournament tourna;
 
     /** 对手球队ID */
     private int opponentId;
@@ -50,7 +52,7 @@ public class Match {
     /** 对方进球数 */
     private int opponentGoals;
 
-    /** 开球时间 yyyy-MM-dd HH:mm */
+    /** 开球时间 yyyy-MM-dd HH:mm:ss */
     private Date kickOffTime;
 
     /** 比赛时长（分钟） */
@@ -59,7 +61,7 @@ public class Match {
     /** 加时点球（0：无加时无点球，1：有点球无加时，2：有加时无点球，3：有加时有点球） */
     private int extraTimePK;
 
-    /** 比赛性质（1：普通轮次积分赛，2：关键轮次积分赛，3：淘汰赛） */
+    /** 比赛性质（1：普通轮次积分赛，2：关键轮次积分赛，3：杯赛小组赛，3：淘汰赛） */
     private int matchType;
 
     /** 裁判姓名 */
@@ -95,12 +97,12 @@ public class Match {
         this.mtime = mtime;
     }
 
-    public int getTournamentId() {
-        return tournamentId;
+    public Tournament getTourna() {
+        return tourna;
     }
 
-    public void setTournamentId(int tournamentId) {
-        this.tournamentId = tournamentId;
+    public void setTourna(Tournament tourna) {
+        this.tourna = tourna;
     }
 
     public int getOpponentId() {

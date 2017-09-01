@@ -110,7 +110,7 @@
             <div class="form-group">
                 <label for="desc-field" class="col-sm-3 control-label">备注</label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" id="desc-field" name="desc" v-model="opTeam.desc" rows="5"/>
+                    <textarea class="form-control" id="desc-field" name="desc" v-model="opTeam.desc" rows="5"></textarea>
                 </div>
             </div>
 
@@ -176,7 +176,7 @@
             },
             //排序方向切换
             toggleDirection : function() {
-                if(this.direction == "ASC") {
+                if(this.direction === "ASC") {
                     this.direction = "DESC";
                     $("#btnSort").html("排序↓");
                 }
@@ -224,12 +224,12 @@
                 this.loadTeams();
             },
             previousPage: function(){
-                if(this.pageNo==1) return;
+                if(this.pageNo===1) return;
                 this.pageNo = this.pageNo-1;
                 this.loadTeams();
             },
             nextPage: function(){
-                if(this.pageNo==this.pages) return;
+                if(this.pageNo===this.pages) return;
                 this.pageNo = this.pageNo+1;
                 this.loadTeams();
             },
@@ -248,9 +248,7 @@
                 this.operate = "view";
                 $('#headerModTeam').html("查看球队资料");
                 $('#modTeam').modal('show');
-                $('#modTeam').find('input').attr("disabled","disabled");
-                $('#modTeam').find('select').attr("disabled","disabled");
-                $('#modTeam').find('textarea').attr("disabled","disabled");
+                $('#modTeam').find('input','select','textarea').attr("disabled","disabled");
                 $('#modTeam').find('.modal-footer').hide();
             },
             //弹出“新增球队资料”窗口
@@ -260,9 +258,7 @@
                 this.opTeam.teamType = "1";//默认为"联赛"
                 $('#headerModTeam').html("新增球队资料");
                 $('#modTeam').modal('show');
-                $('#modTeam').find('input').removeAttr("disabled");
-                $('#modTeam').find('select').removeAttr("disabled");
-                $('#modTeam').find('textarea').removeAttr("disabled");
+                $('#modTeam').find('input','select','textarea').removeAttr("disabled");
                 $('#modTeam').find('.modal-footer').show();
                 this.resetTeamForm();
             },
@@ -272,16 +268,14 @@
                 this.operate = "edit";
                 $('#headerModTeam').html("修改球队资料");
                 $('#modTeam').modal('show');
-                $('#modTeam').find('input').removeAttr("disabled");
-                $('#modTeam').find('select').removeAttr("disabled");
-                $('#modTeam').find('textarea').removeAttr("disabled");
+                $('#modTeam').find('input','select','textarea').removeAttr("disabled");
                 $('#modTeam').find('.modal-footer').show();
             },
             //确认新增、修改操作
             teamModalConfirm: function(){
-                if("add"==this.operate){
+                if("add"===this.operate){
                     this.saveAddTeam();
-                }else if("edit"==this.operate){
+                }else if("edit"===this.operate){
                     this.saveEditTeam();
                 }
             },
@@ -329,12 +323,12 @@
                     ids += id+",";
                     idObject[id] = true;
                 });
-                if(""==ids) return;
+                if(""===ids) return;
                 ids = ids.substr(0,ids.length-1);
-                $("#confirmModal").modal('show')
+                $("#confirmModal").modal('show');
                 $("#confirmButton").unbind("click");
                 $("#confirmButton").bind("click",function(){
-                    $("#confirmModal").modal('hide')
+                    $("#confirmModal").modal('hide');
                     var param = {ids: ids};
                     CommonOperation.ajaxRequest("removeTeams.html",param,{
                         func: function(result){

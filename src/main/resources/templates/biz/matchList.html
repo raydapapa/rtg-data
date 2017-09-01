@@ -17,8 +17,8 @@
         <!-- 按钮图标 -->
         <div class="box-header">
             <div class="col-md-4">
-                <a href="javascript:void(0)" class="tool-a" v-on:click="addTournament"><i class="glyphicon glyphicon-plus"></i></a>
-                <a href="javascript:void(0)" class="tool-a" v-on:click="delTournament"><i class="glyphicon glyphicon-minus"></i></a>
+                <a href="javascript:void(0)" class="tool-a" v-on:click="addMatch"><i class="glyphicon glyphicon-plus"></i></a>
+                <a href="javascript:void(0)" class="tool-a" v-on:click="delMatch"><i class="glyphicon glyphicon-minus"></i></a>
                 <a href="javascript:void(0)" class="tool-a" v-on:click="refresh"><i class="glyphicon glyphicon-refresh"></i></a>
             </div>
             <div class="col-md-2"></div>
@@ -33,7 +33,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:void(0)" v-on:click="sort('seasonStartDate')">开始日期</a></li>
-                        <li><a href="javascript:void(0)" v-on:click="sort('tournamentType')">赛事类型</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('matchType')">比赛类型</a></li>
                         <li><a href="javascript:void(0)" v-on:click="sort('ourRank')">我队名次</a></li>
                     </ul>
                 </div>
@@ -41,13 +41,13 @@
 
         </div>
         <!-- 表格 -->
-        <table class="table table-hover table-striped" id="tblTournamentList">
+        <table class="table table-hover table-striped" id="tblMatchList">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="cbxCheckAll" v-on:click="checkAll" /></th>
-                    <th>赛事名</th>
+                    <th>比赛名</th>
                     <th>球场位置</th>
-                    <th>赛事类型</th>
+                    <th>比赛类型</th>
                     <th>开赛日期</th>
                     <th>结束日期</th>
                     <th>取得名次</th>
@@ -56,21 +56,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in tournaments">
+                <tr v-for="item in matchs">
                     <td><input type="checkbox" v-bind:value="item.id"/></td>
                     <td v-text="item.name"></td>
                     <td v-text="item.location"></td>
                     <td>
-                        <span v-if="item.tournamentType==1">联赛</span>
-                        <span v-if="item.tournamentType==2">杯赛</span>
+                        <span v-if="item.matchType==1">联赛</span>
+                        <span v-if="item.matchType==2">杯赛</span>
                     </td>
                     <td v-text="item.seasonStartDate"></td>
                     <td v-text="item.seasonEndDate"></td>
                     <td v-text="item.ourRank"></td>
                     <td v-text="item.teamCnt"></td>
                     <td>
-                        <a class="btn btn-default btn-sm" v-on:click="viewTournament(item)">查看</a>
-                        <button type="button" class="btn btn-primary btn-sm" v-on:click="editTournament(item)">修改</button>
+                        <a class="btn btn-default btn-sm" v-on:click="viewMatch(item)">查看</a>
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="editMatch(item)">修改</button>
                     </td>
                 </tr>
             </tbody>
@@ -106,79 +106,79 @@
 </div>
 </div>
 
-<!-- 新增赛事窗口 -->
-<div class="modal fade bs-example-modal-sm" id="modTournament" tabindex="-1" role="dialog">
+<!-- 新增比赛窗口 -->
+<div class="modal fade bs-example-modal-sm" id="modMatch" tabindex="-1" role="dialog">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h2 class="modal-title" id="headerModTournament">赛事信息</h2>
+        <h2 class="modal-title" id="headerModMatch">比赛信息</h2>
     </div>
     <div class="modal-body">
-        <form class="form-horizontal" id="formTournament">
+        <form class="form-horizontal" id="formMatch">
             <div class="form-group">
-                <label for="tournamentName-field" class="col-sm-3 control-label">赛事名</label>
+                <label for="matchName-field" class="col-sm-3 control-label">比赛名</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="tournamentName-field" name="name" v-model="opTournament.name" placeholder="请输入赛事名" />
+                    <input class="form-control" id="matchName-field" name="name" v-model="opMatch.name" placeholder="请输入比赛名" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="location-field" class="col-sm-3 control-label">球场位置</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="location-field" name="location" v-model="opTournament.location" placeholder="请输入球场位置" />
+                    <input class="form-control" id="location-field" name="location" v-model="opMatch.location" placeholder="请输入球场位置" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="tournamentType-field" class="col-sm-3 control-label">赛事类型</label>
+                <label for="matchType-field" class="col-sm-3 control-label">比赛类型</label>
                 <div class="col-sm-3">
-                    <select class="form-control" id="tournamentType-field" name="tournamentType" v-model="opTournament.tournamentType" style="width: 90px">
+                    <select class="form-control" id="matchType-field" name="matchType" v-model="opMatch.matchType" style="width: 90px">
                         <option value="1">联赛</option>
                         <option value="2">杯赛</option>
                     </select>
                 </div>
                 <label for="teamCnt-field" class="col-sm-3 control-label">参赛球队数</label>
                 <div class="col-sm-3">
-                    <input class="form-control" id="teamCnt-field" name="teamCnt" v-model="opTournament.teamCnt" placeholder="球队数量" />
+                    <input class="form-control" id="teamCnt-field" name="teamCnt" v-model="opMatch.teamCnt" placeholder="球队数量" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="seasonStartDate-field" class="col-sm-3 control-label">开赛日期</label>
                 <div class="col-sm-3">
-                    <input class="form-control" id="seasonStartDate-field" name="seasonStartDate" v-model="opTournament.seasonStartDate" placeholder="开赛日期" readonly="readonly" />
+                    <input class="form-control" id="seasonStartDate-field" name="seasonStartDate" v-model="opMatch.seasonStartDate" placeholder="开赛日期" readonly="readonly" />
                 </div>
                 <label for="seasonEndDate-field" class="col-sm-3 control-label">结束日期</label>
                 <div class="col-sm-3">
-                    <input class="form-control" id="seasonEndDate-field" name="seasonEndDate" v-model="opTournament.seasonEndDate" placeholder="结束日期" readonly="readonly" />
+                    <input class="form-control" id="seasonEndDate-field" name="seasonEndDate" v-model="opMatch.seasonEndDate" placeholder="结束日期" readonly="readonly" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="officialUrl-field" class="col-sm-3 control-label">官网地址</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="officialUrl-field" name="officialUrl" v-model="opTournament.officialUrl" />
+                    <input class="form-control" id="officialUrl-field" name="officialUrl" v-model="opMatch.officialUrl" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="ourRank-field" class="col-sm-3 control-label">我队名次</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="ourRank-field" name="ourRank" v-model="opTournament.ourRank" />
+                    <input class="form-control" id="ourRank-field" name="ourRank" v-model="opMatch.ourRank" />
                 </div>
                 <label for="championId-field" class="col-sm-2 control-label">夺冠球队</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="championId-field" name="championId" v-model="opTournament.championId" />
+                    <input class="form-control" id="championId-field" name="championId" v-model="opMatch.championId" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="desc-field" class="col-sm-3 control-label">备注</label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" id="desc-field" name="desc" v-model="opTournament.desc" rows="5"></textarea>
+                    <textarea class="form-control" id="desc-field" name="desc" v-model="opMatch.desc" rows="5"></textarea>
                 </div>
             </div>
 
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" v-on:click="tournamentModalConfirm">保存</button>
-        <button type="reset" class="btn btn-default" v-on:click="resetTournamentForm">重置</button>
+        <button type="button" class="btn btn-primary" v-on:click="matchModalConfirm">保存</button>
+        <button type="reset" class="btn btn-default" v-on:click="resetMatchForm">重置</button>
     </div>
 </div>
 </div>
@@ -195,7 +195,7 @@
                 <h4 class="modal-title">确认提示框</h4>
             </div>
             <div class="modal-body">
-                <p>确认删除选择的赛事?</p>
+                <p>确认删除选择的比赛?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -219,8 +219,8 @@
             sortKey: "seasonStartDate",
             direction: "DESC",
             operate: 'view',
-            opTournament: {},
-            tournaments : []
+            opMatch: {},
+            matchs : []
         },
         // 在 `methods` 对象中定义方法
         methods: {
@@ -233,7 +233,7 @@
             //关键字查询
             query : function() {
                 this.pageNo = 1;
-                this.loadTournaments();
+                this.loadMatchs();
             },
             //排序
             sort : function(sortKey) {
@@ -242,7 +242,7 @@
             },
             //排序方向切换
             toggleDirection : function() {
-                if(this.direction == "ASC") {
+                if(this.direction === "ASC") {
                     this.direction = "DESC";
                     $("#btnSort").html("排序↓");
                 }
@@ -251,8 +251,8 @@
                     $("#btnSort").html("排序↑");
                 }
             },
-            //加载赛事列表
-            loadTournaments : function() {
+            //加载比赛列表
+            loadMatchs : function() {
                 var param = {
                     sortKey: this.sortKey,
                     direction: this.direction,
@@ -260,21 +260,21 @@
                     pageNo: this.pageNo-1,//页面的pageNo以1为起始，后端是以0为起始
                     pageSize: this.pageSize
                 };
-                CommonOperation.ajaxRequest("queryTournament.html",param,{
+                CommonOperation.ajaxRequest("queryMatch.html",param,{
                     func: function(result){
                         var page = result.obj||{};
                         vm.pages = page.totalPages;
                         vm.total = page.totalElements;
-                        vm.tournaments.splice(0,vm.tournaments.length);
+                        vm.matchs.splice(0,vm.matchs.length);
                         var content = page.content;
                         $.each(content, function() {
                             this.seasonStartDate = vm.dateFmt(this.seasonStartDate);
                             this.seasonEndDate = vm.dateFmt(this.seasonEndDate);
-                            vm.tournaments.push(this);
+                            vm.matchs.push(this);
                         });
                     },
                     errorFunc: function(error){
-                        alert("加载赛事列表出现错误！"+error.toString());
+                        alert("加载比赛列表出现错误！"+error.toString());
                     },
                     element: $("body")
                 });
@@ -283,134 +283,134 @@
             refresh: function(){
                 this.pageNo = 1;
                 this.keyword = "";
-                this.loadTournaments();
-                $("#tblTournamentList tbody").find("input[type='checkbox']").prop("checked",false);
+                this.loadMatchs();
+                $("#tblMatchList tbody").find("input[type='checkbox']").prop("checked",false);
             },
             //分页导航
             tpPage: function(page){
                 this.pageNo = page;
-                this.loadTournaments();
+                this.loadMatchs();
             },
             previousPage: function(){
-                if(this.pageNo==1) return;
+                if(this.pageNo===1) return;
                 this.pageNo = this.pageNo-1;
-                this.loadTournaments();
+                this.loadMatchs();
             },
             nextPage: function(){
-                if(this.pageNo==this.pages) return;
+                if(this.pageNo===this.pages) return;
                 this.pageNo = this.pageNo+1;
-                this.loadTournaments();
+                this.loadMatchs();
             },
             //选中所有checkbox
             checkAll: function(){
                 var checked = $("#cbxCheckAll").prop("checked");
-                $("#tblTournamentList tbody").find("input[type='checkbox']").prop("checked",checked);
+                $("#tblMatchList tbody").find("input[type='checkbox']").prop("checked",checked);
             },
-            //重置赛事表单
-            resetTournamentForm: function(){
-                document.getElementById("formTournament").reset();//每次打开窗口时清空上次录入的信息
+            //重置比赛表单
+            resetMatchForm: function(){
+                document.getElementById("formMatch").reset();//每次打开窗口时清空上次录入的信息
             },
-            //弹出"查看赛事资料"窗口
-            viewTournament: function(tournament){
-                this.opTournament = tournament;
+            //弹出"查看比赛资料"窗口
+            viewMatch: function(match){
+                this.opMatch = match;
                 this.operate = "view";
-                $('#headerModTournament').html("查看赛事资料");
-                $('#modTournament').modal('show');
-                $('#modTournament').find('input','select','textarea').attr("disabled","disabled");
-                $('#modTournament').find('.modal-footer').hide();
+                $('#headerModMatch').html("查看比赛资料");
+                $('#modMatch').modal('show');
+                $('#modMatch').find('input','select','textarea').attr("disabled","disabled");
+                $('#modMatch').find('.modal-footer').hide();
             },
-            //弹出“新增赛事资料”窗口
-            addTournament: function() {
-                this.opTournament = {};
+            //弹出“新增比赛资料”窗口
+            addMatch: function() {
+                this.opMatch = {};
                 this.operate = "add";
-                this.opTournament.tournamentType = "1";//默认为"联赛"
-                $('#headerModTournament').html("新增赛事资料");
-                $('#modTournament').modal('show');
-                $('#modTournament').find('input','select','textarea').removeAttr("disabled");
-                $('#modTournament').find('.modal-footer').show();
-                this.resetTournamentForm();
+                this.opMatch.matchType = "1";//默认为"联赛"
+                $('#headerModMatch').html("新增比赛资料");
+                $('#modMatch').modal('show');
+                $('#modMatch').find('input','select','textarea').removeAttr("disabled");
+                $('#modMatch').find('.modal-footer').show();
+                this.resetMatchForm();
             },
-            //弹出"修改赛事资料"窗口
-            editTournament: function(tournament){
-                this.opTournament = tournament;
+            //弹出"修改比赛资料"窗口
+            editMatch: function(match){
+                this.opMatch = match;
                 this.operate = "edit";
-                $('#headerModTournament').html("修改赛事资料");
-                $('#modTournament').modal('show');
-                $('#modTournament').find('input','select','textarea').removeAttr("disabled");
-                $('#modTournament').find('.modal-footer').show();
+                $('#headerModMatch').html("修改比赛资料");
+                $('#modMatch').modal('show');
+                $('#modMatch').find('input','select','textarea').removeAttr("disabled");
+                $('#modMatch').find('.modal-footer').show();
             },
             //确认新增、修改操作
-            tournamentModalConfirm: function(){
-                if("add"==this.operate){
-                    this.saveAddTournament();
-                }else if("edit"==this.operate){
-                    this.saveEditTournament();
+            matchModalConfirm: function(){
+                if("add"===this.operate){
+                    this.saveAddMatch();
+                }else if("edit"===this.operate){
+                    this.saveEditMatch();
                 }
             },
             //保存新增操作
-            saveAddTournament: function(){
-                CommonOperation.ajaxRequest("saveTournament.html",this.opTournament,{
+            saveAddMatch: function(){
+                CommonOperation.ajaxRequest("saveMatch.html",this.opMatch,{
                     func: function(result){
                         if(result.success){
-                            $('#modTournament').modal('hide');
+                            $('#modMatch').modal('hide');
                         }else{
-                            alert("保存新增赛事资料失败:"+result.msg);
+                            alert("保存新增比赛资料失败:"+result.msg);
                         }
                         vm.refresh();
                     },
                     errorFunc: function(error){
-                        alert("保存新增赛事资料失败:"+error);
+                        alert("保存新增比赛资料失败:"+error);
                     },
-                    element: $("#formTournament")
+                    element: $("#formMatch")
                 });
             },
             //保存修改操作
-            saveEditTournament: function(){
-                delete this.opTournament.ctime;
-                delete this.opTournament.mtime;
-                CommonOperation.ajaxRequest("updateTournament.html",this.opTournament,{
+            saveEditMatch: function(){
+                delete this.opMatch.ctime;
+                delete this.opMatch.mtime;
+                CommonOperation.ajaxRequest("updateMatch.html",this.opMatch,{
                     func: function(result){
                         if(result.success){
-                            $('#modTournament').modal('hide');
+                            $('#modMatch').modal('hide');
                         }else{
-                            alert("修改赛事资料失败:"+result.msg);
+                            alert("修改比赛资料失败:"+result.msg);
                         }
                         vm.refresh();
                     },
                     errorFunc: function(error){
-                        alert("修改赛事资料失败:"+error);
+                        alert("修改比赛资料失败:"+error);
                     },
-                    element: $("#formTournament")
+                    element: $("#formMatch")
                 });
             },
             //删除
-            delTournament: function(){
+            delMatch: function(){
                 var ids = "" , idObject = {};
-                $('#tblTournamentList tbody input:checkbox:checked').each(function(){
+                $('#tblMatchList tbody input:checkbox:checked').each(function(){
                     var id = $(this).val();
                     ids += id+",";
                     idObject[id] = true;
                 });
-                if(""==ids) return;
+                if(""===ids) return;
                 ids = ids.substr(0,ids.length-1);
-                $("#confirmModal").modal('show')
+                $("#confirmModal").modal('show');
                 $("#confirmButton").unbind("click");
                 $("#confirmButton").bind("click",function(){
-                    $("#confirmModal").modal('hide')
+                    $("#confirmModal").modal('hide');
                     var param = {ids: ids};
-                    CommonOperation.ajaxRequest("removeTournaments.html",param,{
+                    CommonOperation.ajaxRequest("removeMatchs.html",param,{
                         func: function(result){
                             if(result.success){
-                                $("#tblTournamentList tbody").find("input[type='checkbox']").prop("checked",false);
+                                $("#tblMatchList tbody").find("input[type='checkbox']").prop("checked",false);
                             }else{
-                                alert("赛事删除失败:"+result.msg);
+                                alert("比赛删除失败:"+result.msg);
                             }
                             vm.refresh();
                         },
                         errorFunc: function(error){
-                            alert("赛事删除出现异常:"+error);
+                            alert("比赛删除出现异常:"+error);
                         },
-                        element: $("#tblTournamentList")
+                        element: $("#tblMatchList")
                     });
                 });
             },
@@ -434,7 +434,7 @@
                     autoclose: true,//选中自动关闭
                     todayBtn: true//显示今日按钮
                 }).on('changeDate', function(ev){
-                    vm.opTournament.seasonStartDate = $(ev.target).val();
+                    vm.opMatch.seasonStartDate = $(ev.target).val();
                 });
                 $("#seasonEndDate-field").datetimepicker({
                     format: "yyyy-mm-dd",
@@ -444,9 +444,9 @@
                     autoclose: true,//选中自动关闭
                     todayBtn: true//显示今日按钮
                 }).on('changeDate', function(ev){
-                    vm.opTournament.seasonEndDate = $(ev.target).val();
+                    vm.opMatch.seasonEndDate = $(ev.target).val();
                 });
-                this.loadTournaments();
+                this.loadMatchs();
             }
         }
     });

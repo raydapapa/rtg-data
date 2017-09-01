@@ -49,7 +49,6 @@ public class TournamentService {
         } else {
             throw new Exception("已经存在名为'"+tournament.getName()+"'的赛事！");
         }
-        tournamentRepository.save(tournament);
     }
 
     public void updateTournament(Tournament tournament) throws Exception {

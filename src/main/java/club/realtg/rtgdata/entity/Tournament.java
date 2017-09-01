@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 赛事实体类
@@ -71,6 +72,10 @@ public class Tournament {
     /** 简介 */
     @Column(name = "description")
     private String desc;
+
+    /** 比赛 */
+    @OneToMany(mappedBy = "tourna")
+    private List<Match> matches;
 
     public Tournament() {
     }
@@ -177,5 +182,13 @@ public class Tournament {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public List<Match> getMatches() {
+        return matches;
+    }
+
+    public void setMatches(List<Match> matches) {
+        this.matches = matches;
     }
 }

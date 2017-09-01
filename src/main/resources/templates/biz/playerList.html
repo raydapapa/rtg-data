@@ -216,7 +216,7 @@
             <div class="form-group">
                 <label for="desc-field" class="col-sm-3 control-label">简介</label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" id="desc-field" name="desc" v-model="opPlayer.desc" />
+                    <textarea class="form-control" id="desc-field" name="desc" v-model="opPlayer.desc" ></textarea>
                 </div>
             </div>
 
@@ -282,7 +282,7 @@
             },
             //排序方向切换
             toggleDirection : function() {
-                if(this.direction == "ASC") {
+                if(this.direction === "ASC") {
                     this.direction = "DESC";
                     $("#btnSort").html("排序↓");
                 }
@@ -323,7 +323,7 @@
                 this.pageNo = 1;
                 this.keyword = "";
                 this.loadPlayers();
-                $("#tblPlayerList tbody").find("input[type='checkbox']").prop("checked",false);
+                $("#tblPlayerList").find("tbody").find("input[type='checkbox']").prop("checked",false);
             },
             //分页导航
             tpPage: function(page){
@@ -331,19 +331,19 @@
                 this.loadPlayers();
             },
             previousPage: function(){
-                if(this.pageNo==1) return;
+                if(this.pageNo===1) return;
                 this.pageNo = this.pageNo-1;
                 this.loadPlayers();
             },
             nextPage: function(){
-                if(this.pageNo==this.pages) return;
+                if(this.pageNo===this.pages) return;
                 this.pageNo = this.pageNo+1;
                 this.loadPlayers();
             },
             //选中所有checkbox
             checkAll: function(){
                 var checked = $("#cbxCheckAll").prop("checked");
-                $("#tblPlayerList tbody").find("input[type='checkbox']").prop("checked",checked);
+                $("#tblPlayerList").find("tbody").find("input[type='checkbox']").prop("checked",checked);
             },
             //重置球员表单
             resetPlayerForm: function(){
@@ -356,9 +356,7 @@
                 $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
                 $('#headerModPlayer').html("查看球员资料");
                 $('#modPlayer').modal('show');
-                $('#modPlayer').find('input').attr("disabled","disabled");
-                $('#modPlayer').find('select').attr("disabled","disabled");
-                $('#modPlayer').find('textarea').attr("disabled","disabled");
+                $('#modPlayer').find('input','select','textarea').attr("disabled","disabled");
                 $('#modPlayer').find('.modal-footer').hide();
             },
             //弹出“新增球员资料”窗口
@@ -369,9 +367,7 @@
                 this.opPlayer.preferredFoot = 1;//默认右脚
                 $('#headerModPlayer').html("新增球员资料");
                 $('#modPlayer').modal('show');
-                $('#modPlayer').find('input').removeAttr("disabled");
-                $('#modPlayer').find('select').removeAttr("disabled");
-                $('#modPlayer').find('textarea').removeAttr("disabled");
+                $('#modPlayer').find('input','select','textarea').removeAttr("disabled");
                 $('#modPlayer').find('.modal-footer').show();
                 this.resetPlayerForm();
             },
@@ -382,16 +378,14 @@
                 $("#age-field").val(vm.computeAge(vm.opPlayer.birthDate));
                 $('#headerModPlayer').html("修改球员资料");
                 $('#modPlayer').modal('show');
-                $('#modPlayer').find('input').removeAttr("disabled");
-                $('#modPlayer').find('select').removeAttr("disabled");
-                $('#modPlayer').find('textarea').removeAttr("disabled");
+                $('#modPlayer').find('input','select','textarea').removeAttr("disabled");
                 $('#modPlayer').find('.modal-footer').show();
             },
             //确认新增、修改操作
             playerModalConfirm: function(){
-                if("add"==this.operate){
+                if("add"===this.operate){
                     this.saveAddPlayer();
-                }else if("edit"==this.operate){
+                }else if("edit"===this.operate){
                     this.saveEditPlayer();
                 }
             },
@@ -441,12 +435,12 @@
                     ids += id+",";
                     idObject[id] = true;
                 });
-                if(""==ids) return;
+                if(""===ids) return;
                 ids = ids.substr(0,ids.length-1);
-                $("#confirmModal").modal('show')
+                $("#confirmModal").modal('show');
                 $("#confirmButton").unbind("click");
                 $("#confirmButton").bind("click",function(){
-                    $("#confirmModal").modal('hide')
+                    $("#confirmModal").modal('hide');
                     var param = {ids: ids};
                     CommonOperation.ajaxRequest("removePlayers.html",param,{
                         func: function(result){
