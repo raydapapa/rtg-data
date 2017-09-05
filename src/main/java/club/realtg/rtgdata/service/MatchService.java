@@ -47,7 +47,7 @@ public class MatchService {
         saveMatch(match);
     }
 
-    public void removeMatchs(String ids) {
+    public void removeMatches(String ids) {
         if (StringUtils.isEmpty(ids)) return;
 
         String[] idArry = ids.split(",");

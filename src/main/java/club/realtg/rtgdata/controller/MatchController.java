@@ -74,9 +74,9 @@ public class MatchController extends BaseController {
     }
 
     @RequestMapping(value = "removeMatchs")
-    public void removeMatchs(HttpServletResponse response, String ids){
+    public void removeMatches(HttpServletResponse response, String ids){
         try {
-            matchService.removeMatchs(ids);
+            matchService.removeMatches(ids);
             writeSuccess(response);
         } catch (Exception e) {
             e.printStackTrace();
