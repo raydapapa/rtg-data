@@ -57,7 +57,13 @@ public class PlayerService {
     }
 
     public void updatePlayer(Player player) throws Exception {
-        savePlayer(player);
+        Player oldPlayer = playerRepository.findOne(player.getId());
+        boolean idCardNoChanged = !oldPlayer.getIdCardNo().equals(player.getIdCardNo());
+        if(idCardNoChanged) { //如果有修改身份证号，则需要校验改后的身份证号是否已经存在
+            savePlayer(player);
+        } else {
+            playerRepository.save(player);
+        }
     }
 
     public void removePlayers(String ids) {

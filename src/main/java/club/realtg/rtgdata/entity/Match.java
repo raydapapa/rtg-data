@@ -2,6 +2,7 @@ package club.realtg.rtgdata.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 比赛实体类
@@ -35,7 +36,7 @@ public class Match {
     @org.hibernate.annotations.UpdateTimestamp
     private Date mtime;
 
-    /** 所属联赛ID */
+    /** 所属赛事ID */
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="tournament_Id")
     private Tournament tourna;
@@ -43,20 +44,8 @@ public class Match {
     /** 对手球队ID */
     private int opponentId;
 
-    /** 主客场（0：不分主客场，1：主场，2：客场） */
-    private int homeAway;
-
-    /** 我方进球数 */
-    private int ourGoals;
-
-    /** 对方进球数 */
-    private int opponentGoals;
-
     /** 开球时间 yyyy-MM-dd HH:mm:ss */
     private Date kickOffTime;
-
-    /** 比赛时长（分钟） */
-    private int matchMinutes;
 
     /** 加时点球（0：无加时无点球，1：有点球无加时，2：有加时无点球，3：有加时有点球） */
     private int extraTimePK;
@@ -68,7 +57,15 @@ public class Match {
     private String referee;
 
     /** 比赛备注 */
-    private String matchNote;
+    private String note;
+
+    /** 球员出场记录 */
+    @OneToMany(mappedBy = "match")
+    private List<Appearance> appearances;
+
+    /** 进球 */
+    @OneToMany(mappedBy = "match")
+    private List<Goal> goals;
 
     public Match() {
     }
@@ -113,44 +110,12 @@ public class Match {
         this.opponentId = opponentId;
     }
 
-    public int getHomeAway() {
-        return homeAway;
-    }
-
-    public void setHomeAway(int homeAway) {
-        this.homeAway = homeAway;
-    }
-
-    public int getOurGoals() {
-        return ourGoals;
-    }
-
-    public void setOurGoals(int ourGoals) {
-        this.ourGoals = ourGoals;
-    }
-
-    public int getOpponentGoals() {
-        return opponentGoals;
-    }
-
-    public void setOpponentGoals(int opponentGoals) {
-        this.opponentGoals = opponentGoals;
-    }
-
     public Date getKickOffTime() {
         return kickOffTime;
     }
 
     public void setKickOffTime(Date kickOffTime) {
         this.kickOffTime = kickOffTime;
-    }
-
-    public int getMatchMinutes() {
-        return matchMinutes;
-    }
-
-    public void setMatchMinutes(int matchMinutes) {
-        this.matchMinutes = matchMinutes;
     }
 
     public int getExtraTimePK() {
@@ -177,11 +142,27 @@ public class Match {
         this.referee = referee;
     }
 
-    public String getMatchNote() {
-        return matchNote;
+    public String getNote() {
+        return note;
     }
 
-    public void setMatchNote(String matchNote) {
-        this.matchNote = matchNote;
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public List<Appearance> getAppearances() {
+        return appearances;
+    }
+
+    public void setAppearances(List<Appearance> appearances) {
+        this.appearances = appearances;
+    }
+
+    public List<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
     }
 }

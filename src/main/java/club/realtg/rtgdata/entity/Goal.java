@@ -37,13 +37,14 @@ public class Goal {
     private Date mtime;
 
     /** 所属比赛ID */
-    @NotNull
-    private int matchId;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="match_Id")
+    private Match match;
 
     /** 进球球队ID（为空表示我方进球） */
     private int teamId;
 
-    /** 进球球员ID */
+    /** 进球球员ID（我方进球时为空表示对方乌龙球） */
     private int scorerId;
 
     /** 助攻球员ID */
@@ -59,7 +60,7 @@ public class Goal {
     private int goalManner;
 
     /** 备注 */
-    private String goalNote;
+    private String note;
 
     public Goal() {
     }
@@ -88,12 +89,12 @@ public class Goal {
         this.mtime = mtime;
     }
 
-    public int getMatchId() {
-        return matchId;
+    public Match getMatch() {
+        return match;
     }
 
-    public void setMatchId(int matchId) {
-        this.matchId = matchId;
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
     public int getTeamId() {
@@ -144,11 +145,11 @@ public class Goal {
         this.goalManner = goalManner;
     }
 
-    public String getGoalNote() {
-        return goalNote;
+    public String getNote() {
+        return note;
     }
 
-    public void setGoalNote(String goalNote) {
-        this.goalNote = goalNote;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

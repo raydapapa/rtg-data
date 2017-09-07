@@ -27,7 +27,7 @@ public class MatchController extends BaseController {
 
     @RequestMapping(value = "matchList")
     public String gotoMatchList(Model model) {
-        String title = "比赛列表";
+        String title = "比赛记录";
         model.addAttribute("title",title);
         return "biz/matchList";
     }
