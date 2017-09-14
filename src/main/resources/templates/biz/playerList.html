@@ -511,6 +511,9 @@
                     required: true,
                     rangelength:[1,12]
                 },
+                position: {
+                    required:true
+                },
                 kitNumber: {
                     digits:true
                 },
@@ -518,12 +521,11 @@
                     dateISO:true
                 },
                 idCardNo: {
-                    idCard:true,
-                    rangelength:[15,18]
+                    required:true,
+                    idCard:true
                 },
                 phoneNo: {
-                    phone:true,
-                    rangelength:[11,11]
+                    phone:true
                 }
             }
         });

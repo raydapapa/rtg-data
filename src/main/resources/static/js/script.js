@@ -72,6 +72,7 @@ $(function(){
         });
         //手机号码的验证
         $.validator.addMethod("phone", function(value, element, param){
+            if(value == null || value == "") return true;
             var pattern = /^1[34578]\d{9}$/;
             return pattern.test(value)
         }, "请输入合法的11位手机号");
