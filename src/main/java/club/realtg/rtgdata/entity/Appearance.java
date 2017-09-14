@@ -38,7 +38,7 @@ public class Appearance {
 
     /** 所属比赛ID */
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="match_Id")
+    @JoinColumn(name="match_id")
     private Match match;
 
     /** 球员ID */
@@ -49,7 +49,7 @@ public class Appearance {
     private int playedMinutes;
 
     /** 是否首发 1：首发 0：替补 */
-    private int starting;
+    private int startingSquad;
 
     /** 备注 */
     private String note;
@@ -102,12 +102,12 @@ public class Appearance {
         this.playedMinutes = playedMinutes;
     }
 
-    public int getStarting() {
-        return starting;
+    public int getStartingSquad() {
+        return startingSquad;
     }
 
-    public void setStarting(int starting) {
-        this.starting = starting;
+    public void setStartingSquad(int startingSquad) {
+        this.startingSquad = startingSquad;
     }
 
     public String getNote() {

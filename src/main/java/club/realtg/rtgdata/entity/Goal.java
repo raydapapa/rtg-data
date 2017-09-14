@@ -1,7 +1,6 @@
 package club.realtg.rtgdata.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -38,7 +37,7 @@ public class Goal {
 
     /** 所属比赛ID */
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="match_Id")
+    @JoinColumn(name="match_id")
     private Match match;
 
     /** 进球球队ID（为空表示我方进球） */

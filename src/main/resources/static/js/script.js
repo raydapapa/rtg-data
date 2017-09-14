@@ -52,7 +52,7 @@ CommonOperation.ajaxRequest = function(url,data,options){
 $(function(){
     if($.validator&&$.validator.messages){
         $.extend($.validator.messages, {
-            required: "必选字段",
+            required: "必填字段",
             remote: "请修正该字段",
             email: "请输入正确格式的电子邮件",
             url: "请输入合法的网址",
@@ -70,5 +70,15 @@ $(function(){
             max: $.validator.format("请输入一个最大为 {0} 的值"),
             min: $.validator.format("请输入一个最小为 {0} 的值")
         });
+        //手机号码的验证
+        $.validator.addMethod("phone", function(value, element, param){
+            var pattern = /^1[34578]\d{9}$/;
+            return pattern.test(value)
+        }, "请输入合法的11位手机号");
+        //身份证号的验证
+        $.validator.addMethod("idCard", function(value, element, param){
+            var pattern = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            return pattern.test(value);
+        }, "请输入合法的身份证号");
     }
 });

@@ -143,7 +143,7 @@
 
                 <label for="kitNumber-field" class="col-sm-2 control-label">球衣号码</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="kitNumber-field" name="kitNumber" v-model="opPlayer.kitNumber" />
+                    <input class="form-control" id="kitNumber-field" name="kitNumber" v-model="opPlayer.kitNumber" maxlength="3" />
                 </div>
             </div>
             <div class="form-group">
@@ -181,24 +181,24 @@
             <div class="form-group">
                 <label for="height-field" class="col-sm-3 control-label">身高(cm)</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="height-field" name="height" v-model="opPlayer.height" />
+                    <input class="form-control" id="height-field" name="height" v-model="opPlayer.height" maxlength="3" />
                 </div>
 
                 <label for="weight-field" class="col-sm-2 control-label">体重(kg)</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="weight-field" name="weight" v-model="opPlayer.weight" />
+                    <input class="form-control" id="weight-field" name="weight" v-model="opPlayer.weight" maxlength="3" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="idCardNo-field" class="col-sm-3 control-label">身份证号</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="idCardNo-field" name="idCardNo" v-model="opPlayer.idCardNo" />
+                    <input class="form-control" id="idCardNo-field" name="idCardNo" v-model="opPlayer.idCardNo" maxlength="18" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="phoneNo-field" class="col-sm-3 control-label">手机号</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="phoneNo-field" name="phoneNo" v-model="opPlayer.phoneNo" />
+                    <input class="form-control" id="phoneNo-field" name="phoneNo" v-model="opPlayer.phoneNo" maxlength="11" />
                 </div>
             </div>
             <div class="form-group">
@@ -383,6 +383,7 @@
             },
             //确认新增、修改操作
             playerModalConfirm: function(){
+                if(!$("#formPlayer").valid()) return;
                 if("add"===this.operate){
                     this.saveAddPlayer();
                 }else if("edit"===this.operate){
@@ -391,7 +392,6 @@
             },
             //保存新增操作
             saveAddPlayer: function(){
-//                if(!$("#formPlayer").valid()) return;
                 CommonOperation.ajaxRequest("savePlayer.html",this.opPlayer,{
                     func: function(result){
                         if(result.success){
@@ -409,7 +409,6 @@
             },
             //保存修改操作
             saveEditPlayer: function(){
-//                if(!$("#formAddEmployee").valid()) return;
                 delete this.opPlayer.ctime;
                 delete this.opPlayer.mtime;
                 CommonOperation.ajaxRequest("updatePlayer.html",this.opPlayer,{
@@ -500,8 +499,44 @@
         }
     });
     vm.initPage();
-</script>
 
+    $(document).ready(function () {
+        $("#formPlayer").validate({
+            rules: {
+                realName: {
+                    required: true,
+                    rangelength:[2,6]
+                },
+                nickName: {
+                    required: true,
+                    rangelength:[1,12]
+                },
+                kitNumber: {
+                    digits:true
+                },
+                birthDate: {
+                    dateISO:true
+                },
+                idCardNo: {
+                    idCard:true,
+                    rangelength:[15,18]
+                },
+                phoneNo: {
+                    phone:true,
+                    rangelength:[11,11]
+                }
+            }
+        });
+        //球衣号码、身高、体重只允许输入正整数
+        $('#kitNumber-field,#height-field,#weight-field,#phoneNo-field').keyup(function(){
+            var c=$(this);
+            if(/[^\d]/.test(c.val())){//替换非数字字符
+                var temp_amount=c.val().replace(/[^\d]/g,'');
+                $(this).val(temp_amount);
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
