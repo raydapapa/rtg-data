@@ -30,8 +30,7 @@ public class MatchService {
 
     public Page<Match> getMatchsPage(int pageNo, int pageSize, String keyword, String sortKey, String direction) {
         Specifications newSpes;
-        newSpes = Specifications.where(new BaseSearch<Match>(new SearchDto("name", SearchDto.LIKE, keyword)))
-                .or(new BaseSearch<>(new SearchDto("location", "like", keyword)));
+        newSpes = Specifications.where(new BaseSearch<Match>(new SearchDto("pitch", SearchDto.LIKE, keyword)));
         return matchRepository.findAll(newSpes, PageableUtil.basicPage(pageNo, pageSize, new SortDto(direction, sortKey)));
     }
 

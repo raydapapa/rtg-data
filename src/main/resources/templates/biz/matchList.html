@@ -32,9 +32,9 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)" v-on:click="sort('seasonStartDate')">开始日期</a></li>
+                        <!--<li><a href="javascript:void(0)" v-on:click="sort('seasonStartDate')">开始日期</a></li>
                         <li><a href="javascript:void(0)" v-on:click="sort('matchType')">比赛类型</a></li>
-                        <li><a href="javascript:void(0)" v-on:click="sort('ourRank')">我队名次</a></li>
+                        <li><a href="javascript:void(0)" v-on:click="sort('ourRank')">我队名次</a></li>-->
                     </ul>
                 </div>
             </div>
@@ -45,29 +45,22 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" id="cbxCheckAll" v-on:click="checkAll" /></th>
-                    <th>比赛名</th>
-                    <th>球场位置</th>
-                    <th>比赛类型</th>
-                    <th>开赛日期</th>
-                    <th>结束日期</th>
-                    <th>取得名次</th>
-                    <th>参赛球队数</th>
+                    <th>赛事</th>
+                    <th>场地</th>
+                    <th>对手</th>
+                    <th>开球时间</th>
+                    <th>比分</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="item in matchs">
                     <td><input type="checkbox" v-bind:value="item.id"/></td>
-                    <td v-text="item.name"></td>
-                    <td v-text="item.location"></td>
-                    <td>
-                        <span v-if="item.matchType==1">联赛</span>
-                        <span v-if="item.matchType==2">杯赛</span>
-                    </td>
-                    <td v-text="item.seasonStartDate"></td>
-                    <td v-text="item.seasonEndDate"></td>
-                    <td v-text="item.ourRank"></td>
-                    <td v-text="item.teamCnt"></td>
+                    <td v-text="item.tourna.name"></td>
+                    <td v-text="item.pitch"></td>
+                    <td v-text="item.opponentId"></td>
+                    <td v-text="item.kickOffTime"></td>
+                    <td v-text="item.finalScore"></td>
                     <td>
                         <a class="btn btn-default btn-sm" v-on:click="viewMatch(item)">查看</a>
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="editMatch(item)">修改</button>
@@ -109,7 +102,8 @@
 <!-- 新增比赛窗口 -->
 <div class="modal fade bs-example-modal-sm" id="modMatch" tabindex="-1" role="dialog">
 <div class="modal-dialog" role="document">
-<div class="modal-content">
+<!-- 比赛详情主区域 -->
+<div class="modal-content" id="divModMatch">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h2 class="modal-title" id="headerModMatch">比赛信息</h2>
@@ -117,60 +111,48 @@
     <div class="modal-body">
         <form class="form-horizontal" id="formMatch">
             <div class="form-group">
-                <label for="matchName-field" class="col-sm-3 control-label">比赛名</label>
+                <label for="tournament-field" class="col-sm-3 control-label">所属赛事</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="matchName-field" name="name" v-model="opMatch.name" placeholder="请输入比赛名" />
+                    <input class="form-control" id="tournament-field" name="tournament" v-model="opMatch.tourna" placeholder="请输入比赛名" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="location-field" class="col-sm-3 control-label">球场位置</label>
+                <label for="opponent-field" class="col-sm-3 control-label">对手球队</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="location-field" name="location" v-model="opMatch.location" placeholder="请输入球场位置" />
+                    <input class="form-control" id="opponent-field" name="opponent" v-model="opponentName"
+                           v-on:click="showTeamList" placeholder="请选择对手球队" readonly="readonly" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="matchType-field" class="col-sm-3 control-label">比赛类型</label>
-                <div class="col-sm-3">
-                    <select class="form-control" id="matchType-field" name="matchType" v-model="opMatch.matchType" style="width: 90px">
-                        <option value="1">联赛</option>
-                        <option value="2">杯赛</option>
-                    </select>
-                </div>
-                <label for="teamCnt-field" class="col-sm-3 control-label">参赛球队数</label>
-                <div class="col-sm-3">
-                    <input class="form-control" id="teamCnt-field" name="teamCnt" v-model="opMatch.teamCnt" placeholder="球队数量" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="seasonStartDate-field" class="col-sm-3 control-label">开赛日期</label>
-                <div class="col-sm-3">
-                    <input class="form-control" id="seasonStartDate-field" name="seasonStartDate" v-model="opMatch.seasonStartDate" placeholder="开赛日期" readonly="readonly" />
-                </div>
-                <label for="seasonEndDate-field" class="col-sm-3 control-label">结束日期</label>
-                <div class="col-sm-3">
-                    <input class="form-control" id="seasonEndDate-field" name="seasonEndDate" v-model="opMatch.seasonEndDate" placeholder="结束日期" readonly="readonly" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="officialUrl-field" class="col-sm-3 control-label">官网地址</label>
+                <label for="pitch-field" class="col-sm-3 control-label">比赛场地</label>
                 <div class="col-sm-6">
-                    <input class="form-control" id="officialUrl-field" name="officialUrl" v-model="opMatch.officialUrl" />
+                    <input class="form-control" id="pitch-field" name="pitch" v-model="opMatch.pitch" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="ourRank-field" class="col-sm-3 control-label">我队名次</label>
-                <div class="col-sm-2">
+                <label for="kickOffTime-field" class="col-sm-3 control-label">开球时间</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="kickOffTime-field" name="kickOffTime" v-model="opMatch.kickOffTime" placeholder="开球时间" readonly="readonly" />
+                </div>
+                <label for="finalScore-field" class="col-sm-2 control-label">最终比分</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="finalScore-field" name="finalScore" v-model="opMatch.finalScore" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ourRank-field" class="col-sm-3 control-label">加时点球</label>
+                <div class="col-sm-3">
                     <input class="form-control" id="ourRank-field" name="ourRank" v-model="opMatch.ourRank" />
                 </div>
-                <label for="championId-field" class="col-sm-2 control-label">夺冠球队</label>
+                <label for="referee-field" class="col-sm-2 control-label">裁判姓名</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="championId-field" name="championId" v-model="opMatch.championId" />
+                    <input class="form-control" id="referee-field" name="referee" v-model="opMatch.referee" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="desc-field" class="col-sm-3 control-label">备注</label>
+                <label for="note-field" class="col-sm-3 control-label">备注</label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" id="desc-field" name="desc" v-model="opMatch.desc" rows="5"></textarea>
+                    <textarea class="form-control" id="note-field" name="note" v-model="opMatch.note" rows="5"></textarea>
                 </div>
             </div>
 
@@ -181,6 +163,59 @@
         <button type="reset" class="btn btn-default" v-on:click="resetMatchForm">重置</button>
     </div>
 </div>
+
+<!-- 选择对手球队区域 -->
+<div class="modal-content" id="divTeamList">
+    <div class="modal-body" style="min-height: 500px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <h6 class="box-title" style="font-size: 13px;">选择对手球队</h6>
+                        <div class="box-tools pull-right">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" class="form-control input-sm" style="width: 50%;" v-model="iKeyword" placeholder="关键字" />
+                                    <a href="javascript:void(0)" class="btn btn-primary btn-sm search" v-on:click="queryTeam">查询</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table id="tblTeamList" width="100%" class="table table-hover table-bordered table-striped" align="center">
+                            <tr v-for="item in teams">
+                                <td width="5%">
+                                    <input type="radio" v-bind:value="item.id" v-on:click="selectTeam(item,$event)" />
+                                </td>
+                                <td v-text="item.name"></td>
+                            </tr>
+                            <tr v-if="teams.length==0">
+                                <td colspan="4" style="text-align: center;">没有符合查询条件的球队</td>
+                            </tr>
+                        </table>
+                        <div class="pagebar" v-if="iPages>1">
+                            <nav class="pull-right" style="padding-right: 40px;" aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li><a href="javascript:void(0)" v-on:click="previousiPage" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                                    <li><a href="javascript:void(0)" v-on:click="tpiPage(pageNo-1)" v-text="iPageNo-1" v-if="iPageNo-1&gt;=1"></a></li>
+                                    <li class="active"><a href="javascript:void(0)" v-on:click="tpiPage(pageNo)" v-text="iPageNo"></a></li>
+                                    <li><a href="javascript:void(0)" v-on:click="tpiPage(pageNo+1)" v-text="iPageNo+1" v-if="iPageNo+1&lt;=iPages"></a></li>
+                                    <li><a href="javascript:void(0)" v-on:click="nextiPage" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="reset" class="btn btn-reset" v-on:click="backModForm">返回</button>
+        <button type="button" class="btn btn-primary" v-on:click="confirmTeam">确定</button>
+    </div>
+</div>
+
 </div>
 </div>
 
@@ -216,11 +251,18 @@
             pages: 0,
             total: 0,
             keyword: "",
-            sortKey: "seasonStartDate",
+            iPageNo: 1,
+            iPageSize: 15,
+            iPages: 0,
+            iKeyword: "",
+            sortKey: "mtime",
             direction: "DESC",
             operate: 'view',
             opMatch: {},
-            matchs : []
+            matchs: [],
+            teams: [],
+            opponentId: "",
+            opponentName: ""
         },
         // 在 `methods` 对象中定义方法
         methods: {
@@ -301,6 +343,20 @@
                 this.pageNo = this.pageNo+1;
                 this.loadMatchs();
             },
+            tpiPage: function(page){
+                this.iPageNo = page;
+                this.loadTeamList();
+            },
+            previousiPage: function(){
+                if(this.iPageNo==1) return;
+                this.iPageNo = this.iPageNo-1;
+                this.loadTeamList();
+            },
+            nextiPage: function(){
+                if(this.iPageNo==this.iPages) return;
+                this.iPageNo = this.iPageNo+1;
+                this.loadTeamList();
+            },
             //选中所有checkbox
             checkAll: function(){
                 var checked = $("#cbxCheckAll").prop("checked");
@@ -329,6 +385,9 @@
                 $('#modMatch').find('input','select','textarea').removeAttr("disabled");
                 $('#modMatch').find('.modal-footer').show();
                 this.resetMatchForm();
+
+                $("#divModMatch").show();
+                $("#divTeamList").hide();
             },
             //弹出"修改比赛资料"窗口
             editMatch: function(match){
@@ -338,6 +397,9 @@
                 $('#modMatch').modal('show');
                 $('#modMatch').find('input','select','textarea').removeAttr("disabled");
                 $('#modMatch').find('.modal-footer').show();
+
+                $("#divModMatch").show();
+                $("#divTeamList").hide();
             },
             //确认新增、修改操作
             matchModalConfirm: function(){
@@ -414,6 +476,62 @@
                     });
                 });
             },
+
+            showTeamList: function(){
+                this.teams.splice(0,this.teams.length);
+                this.iKeyword = "";
+                this.iPageNo = 1;
+                //加载客户列表
+                vm.loadTeamList();
+                $("#divModMatch").hide();
+                $("#divTeamList").show();
+
+            },
+
+            queryTeam: function(){ //搜索球队
+                this.iPageNo = 1;
+                this.loadTeamList();
+            },
+            loadTeamList: function(){ //加载球队列表
+                var param = {
+                    keyword: this.iKeyword,
+                    pageNo: this.iPageNo-1,
+                    pageSize: this.iPageSize
+                };
+                CommonOperation.ajaxRequest("queryTeam.html",param,{
+                    func: function(result){
+                        var page = result.obj||{};
+                        vm.pages = page.totalPages;
+                        vm.total = page.totalElements;
+                        vm.teams.splice(0,vm.teams.length);
+                        var content = page.content;
+                        $.each(content, function() {
+                            vm.teams.push(this);
+                        });
+                    },
+                    errorFunc: function(error){
+                        alert("错误："+error.toString());
+                    },
+                    element: $("body")
+                });
+            },
+
+            backModForm: function(){
+                $("#divModMatch").show();
+                $("#divTeamList").hide();
+            },
+
+            selectTeam: function(team,e){
+                this.opponentName = team.name;
+                this.opponentId = team.id;
+            },
+
+            confirmTeam: function(){
+                $("#divModMatch").show();
+                $("#divTeamList").hide();
+            },
+
+
             //页面初始化
             initPage: function(){
                 $.fn.datetimepicker.dates['zh-CN'] = {

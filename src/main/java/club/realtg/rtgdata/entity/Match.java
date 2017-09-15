@@ -44,14 +44,17 @@ public class Match {
     /** 对手球队ID */
     private int opponentId;
 
+    /** 比赛场地 */
+    private String pitch;
+
     /** 开球时间 yyyy-MM-dd HH:mm:ss */
     private Date kickOffTime;
 
+    /** 最终比分 */
+    private String finalScore;
+
     /** 加时点球（0：无加时无点球，1：有点球无加时，2：有加时无点球，3：有加时有点球） */
     private int extraTimePK;
-
-    /** 比赛性质（1：普通轮次积分赛，2：关键轮次积分赛，3：杯赛小组赛，3：淘汰赛） */
-    private int matchType;
 
     /** 裁判姓名 */
     private String referee;
@@ -110,6 +113,14 @@ public class Match {
         this.opponentId = opponentId;
     }
 
+    public String getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(String pitch) {
+        this.pitch = pitch;
+    }
+
     public Date getKickOffTime() {
         return kickOffTime;
     }
@@ -124,14 +135,6 @@ public class Match {
 
     public void setExtraTimePK(int extraTimePK) {
         this.extraTimePK = extraTimePK;
-    }
-
-    public int getMatchType() {
-        return matchType;
-    }
-
-    public void setMatchType(int matchType) {
-        this.matchType = matchType;
     }
 
     public String getReferee() {
@@ -164,5 +167,13 @@ public class Match {
 
     public void setGoals(List<Goal> goals) {
         this.goals = goals;
+    }
+
+    public String getFinalScore() {
+        return finalScore;
+    }
+
+    public void setFinalScore(String finalScore) {
+        this.finalScore = finalScore;
     }
 }
